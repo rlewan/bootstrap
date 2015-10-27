@@ -1,0 +1,15 @@
+#!/bin/bash
+
+for dir in *
+do
+	if [ -d "$dir" ] && [ -e "$dir/.git" ]
+	then
+		cd $dir
+		echo -e "\033[32mStatus $dir \033[m"
+		git status
+		echo ""
+		echo ""
+		cd ..
+	fi
+done
+
