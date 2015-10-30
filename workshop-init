@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if ! [[ -d ~/bin ]]; then
+	echo "User utilities directory does not exist, create it (~/bin)"
+	mkdir ~/bin
+fi
+
+for util in utils/*
+do
+	ln -siv $(pwd)/$util ~/bin/$(basename $util)
+done
+
