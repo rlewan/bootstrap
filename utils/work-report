@@ -5,8 +5,6 @@
 #
 # # #
 
-current_dir="`pwd`"
-
 date_since=""
 
 while getopts "d:" opt; do
@@ -23,17 +21,15 @@ for dir in "$@"
 do
 	if [ -d "$dir" ] && [ -e "$dir/.git" ];
 	then
-		cd "$dir"
-		echo -e "\nWork report for $dir"
-		git remote -v
+		echo -e "\nWork report for:"
+		git -C $dir remote -v
 		echo ""
 		if [ -n "$date_since" ];
 		then
-			git --no-pager log -p --author="r.lewandowski\|Rafał Lewandowski" --since="$date_since"
+			git -C $dir --no-pager log -p --author="r.lewandowski\|Rafał Lewandowski" --since="$date_since"
 		else
-			git --no-pager log -p --author="r.lewandowski\|Rafał Lewandowski"
+			git -C $dir --no-pager log -p --author="r.lewandowski\|Rafał Lewandowski"
 		fi
-		cd "$current_dir"
 	fi
 done
 
