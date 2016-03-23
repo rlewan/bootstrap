@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -z "$1" ]
+then
+	echo "No branch was specified"
+	exit 1
+fi
+
 for dir in *
 do
 	if [ -d "$dir" ] && [ -e "$dir/.git" ]
