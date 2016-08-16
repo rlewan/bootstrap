@@ -3,7 +3,10 @@
 if [[ -e "gradlew" ]];
 then
 	eval "./gradlew $@"
+elif [[ -n "$(command -v gradle)" ]];
+then
+	eval "gradle $@"
 else
-	echo "No 'gradlew' Gradle wrapper executable available"
+	echo "No 'gradlew' Gradle wrapper or 'gradle' executable available"
 fi
 
