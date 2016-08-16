@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ -e "gradlew" ]];
+then
+	eval "./gradlew $@"
+else
+	echo "No 'gradlew' Gradle wrapper executable available"
+fi
+

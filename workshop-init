@@ -1,6 +1,7 @@
 #!/bin/bash
 
-if ! [[ -d ~/bin ]]; then
+if ! [[ -d ~/bin ]];
+then
 	echo "User utilities directory does not exist, create it (~/bin)"
 	mkdir ~/bin
 fi
