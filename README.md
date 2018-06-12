@@ -1,1 +1,1 @@
-# workshop
+# A development machine bootstrap
