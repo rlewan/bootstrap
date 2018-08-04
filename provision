@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Run ansible scripts
+ansible-playbook ansible.yml
+

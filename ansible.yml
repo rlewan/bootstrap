@@ -1,0 +1,23 @@
+---
+- name: 'Bootstrap development machine'
+  hosts: '127.0.0.1'
+  connection: 'local'
+
+  tasks:
+    - name: 'Copy shell bootstrap files'
+      copy:
+        src: 'shell/{{ item }}'
+        dest: '~'
+      with_items:
+        - '.bashrc'
+        - '.bash_profile'
+        - '.bash_bootstrap'
+
+    - name: 'Ensure fluid project and tooling related bootstrap files are present'
+      copy:
+        src: 'shell/{{ item }}'
+        dest: '~'
+        force: 'no'
+      with_items:
+        - '.bash_projects'
+        - '.bash_tools'
