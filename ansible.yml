@@ -4,7 +4,7 @@
   connection: 'local'
 
   tasks:
-    - name: 'Copy shell bootstrap files'
+    - name: 'Copy shell bootstrap files to the home directory'
       copy:
         src: 'shell/{{ item }}'
         dest: '~'
@@ -13,7 +13,7 @@
         - '.bash_profile'
         - '.bash_bootstrap'
 
-    - name: 'Ensure fluid project and tooling related bootstrap files are present'
+    - name: 'Ensure fluid project and tooling related bootstrap files are present in the home directory'
       copy:
         src: 'shell/{{ item }}'
         dest: '~'
@@ -21,3 +21,8 @@
       with_items:
         - '.bash_projects'
         - '.bash_tools'
+
+    - name: 'Copy .vimrc file to the home directory'
+      copy:
+        src: 'vim/.vimrc'
+        dest: '~'
