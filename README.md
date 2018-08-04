@@ -10,4 +10,4 @@ From the command line do
 $ ./provision
 ```
 
-This will run the Ansible scripts. Currently assumes you already have ansible installed on the system.
+This will run the Ansible scripts. Currently assumes you already have Ansible installed on the system.
