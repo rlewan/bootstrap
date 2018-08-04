@@ -22,6 +22,19 @@
         - '.bash_projects'
         - '.bash_tools'
 
+    - name: 'Ensure ~/bin folder is present'
+      file:
+        path: '~/bin'
+        state: 'directory'
+
+    - name: 'Copy utilities into the ~/bin folder'
+      copy:
+        src: '{{ item }}'
+        dest: '~/bin'
+        mode: '0744'
+      with_fileglob:
+        - 'utils/*'
+
     - name: 'Copy .vimrc file to the home directory'
       copy:
         src: 'vim/.vimrc'
