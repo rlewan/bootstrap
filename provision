@@ -10,8 +10,12 @@ function log {
   echo -e "${COLOUR}${1}${CLEAR}"
 }
 
+function log-single {
+  echo -en "${COLOUR}${1}${CLEAR}"
+}
+
 # Check if Homebrew is available and install if not
-log 'Checking for Homebrew'
+log-single 'Checking for Homebrew... '
 if [ -n "$(command -v brew)" ]
 then
   log 'Homebrew is available'
@@ -21,7 +25,7 @@ else
 fi
 
 # Check if Ansible is available and install if not
-log 'Checking for Ansible'
+log-single 'Checking for Ansible... '
 if [ -n "$(command -v ansible-playbook)" ]
 then
   log 'Ansible is available'
