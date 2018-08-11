@@ -1,4 +1,5 @@
-" Vundle setup (taken from https://github.com/VundleVim/Vundle.vim guide)
+" ==================== Vundle setup ====================
+
 set nocompatible
 filetype off
 
@@ -13,6 +14,8 @@ Plugin 'editorconfig/editorconfig-vim'
 call vundle#end()
 filetype plugin indent on
 
+" ==================== Other setup =====================
+
 " Syntax highlighting
 syntax on
 
@@ -24,3 +27,4 @@ set hlsearch
 
 " Underline current line
 set cursorline
+
