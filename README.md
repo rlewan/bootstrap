@@ -10,4 +10,7 @@ From the command line do
 $ ./provision
 ```
 
-This will run the Ansible scripts. Currently assumes you already have Ansible installed on the system.
+This will:
+- install [Homebrew](https://brew.sh/),
+- install [Ansible](https://www.ansible.com/),
+- execute the `ansible.yml` playbook to perform remaining setup. 

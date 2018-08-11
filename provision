@@ -1,12 +1,25 @@
 #!/bin/bash
 
+set -e
+
 # Check if Homebrew is available and install if not
-if [[ -n "$(command -v brew)" ]]
+echo 'Checking for Homebrew'
+if [ -n "$(command -v brew)" ]
 then
   echo 'Homebrew is available'
 else
   echo 'Homebrew is not available, installing'
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+# Check if Ansible is available and install if not
+echo 'Checking for Ansible'
+if [ -n "$(command -v ansible-playbook)" ]
+then
+  echo 'Ansible is available'
+else
+  echo 'Ansible is not available, installing'
+  brew install ansible
 fi
 
 # Run ansible scripts
