@@ -1,5 +1,14 @@
 #!/bin/bash
 
-# Run ansible scripts
-ansible-playbook ansible.yml
+# Check if Homebrew is available and install if not
+if [[ -n "$(command -v brew)" ]]
+then
+  echo 'Homebrew is available'
+else
+  echo 'Homebrew is not available, installing'
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
 
+# Run ansible scripts
+echo 'Running Ansible'
+ansible-playbook ansible.yml
