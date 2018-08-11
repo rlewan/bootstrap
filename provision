@@ -2,26 +2,34 @@
 
 set -e
 
+# Coloured logging
+COLOUR='\033[1;32m'
+CLEAR='\033[0m'
+
+function log {
+  echo -e "${COLOUR}${1}${CLEAR}"
+}
+
 # Check if Homebrew is available and install if not
-echo 'Checking for Homebrew'
+log 'Checking for Homebrew'
 if [ -n "$(command -v brew)" ]
 then
-  echo 'Homebrew is available'
+  log 'Homebrew is available'
 else
-  echo 'Homebrew is not available, installing' # Installation based on info from https://brew.sh/
+  log 'Homebrew is not available, installing' # Installation based on info from https://brew.sh/
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # Check if Ansible is available and install if not
-echo 'Checking for Ansible'
+log 'Checking for Ansible'
 if [ -n "$(command -v ansible-playbook)" ]
 then
-  echo 'Ansible is available'
+  log 'Ansible is available'
 else
-  echo 'Ansible is not available, installing'
+  log 'Ansible is not available, installing'
   brew install ansible
 fi
 
 # Run ansible scripts
-echo 'Running Ansible'
+log 'Running Ansible'
 ansible-playbook ansible.yml
