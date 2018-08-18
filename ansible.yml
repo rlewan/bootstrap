@@ -66,6 +66,7 @@
         - 'firefox'
         - 'spotify'
         - 'iterm2'
+        - 'atom'
 
     - name: 'Copy iTerm2 configuration'
       copy:
