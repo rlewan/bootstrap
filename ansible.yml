@@ -68,6 +68,7 @@
         - 'iterm2'
         - 'atom'
         - 'intellij-idea'
+        - 'virtualbox'
 
     - name: 'Copy iTerm2 configuration'
       copy:
