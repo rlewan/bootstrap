@@ -15,4 +15,4 @@ This will:
 - install [Ansible](https://www.ansible.com/),
 - execute the `ansible.yml` playbook to perform remaining setup. 
 
-Unfortunately the script is not fully automated at the moment -- you may be asked for a root password a couple of times and will have to approve kernel extensions when installing [VirtualBox](https://www.virtualbox.org/). Just provide the password and re-run as needed, it will eventually finish successfully.  
+Unfortunately the script is not fully automated at the moment, you may be asked for a root password a couple of times and will have to approve kernel extensions when installing [VirtualBox](https://www.virtualbox.org/). Just provide the password and re-run as needed, it will eventually finish successfully.  
