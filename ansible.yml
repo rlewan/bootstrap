@@ -4,7 +4,7 @@
   connection: 'local'
 
   handlers:
-    - name: 'Reload iTerm2 settings'
+    - name: 'Reload iTerm2 configuration'
       command: 'defaults read ~/Library/Preferences/com.googlecode.iterm2.plist'
 
   tasks:
@@ -70,4 +70,4 @@
         src: 'iTerm2/com.googlecode.iterm2.plist'
         dest: '~/Library/Preferences'
       notify:
-        - 'Reload iTerm2 settings'
+        - 'Reload iTerm2 configuration'
