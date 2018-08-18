@@ -17,7 +17,7 @@ This will:
 
 ## Caveats
 
-Unfortunately the script is not fully automated, i.e. it will ask for some human input:
+The script is not fully automated, i.e. some human input will be required:
 
 - you will be asked for a root password during [Spotify](https://www.spotify.com/) and [VirtualBox](https://www.virtualbox.org/) installation,
 - you will have to approve kernel extensions when installing [VirtualBox](https://www.virtualbox.org/). The script will fail the first time but a re-run will succeed after approving,
