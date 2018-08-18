@@ -67,6 +67,7 @@
         - 'spotify'
         - 'iterm2'
         - 'atom'
+        - 'intellij-idea'
 
     - name: 'Copy iTerm2 configuration'
       copy:
