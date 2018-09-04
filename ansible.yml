@@ -57,6 +57,7 @@
         - 'bash-completion'
         - 'wget'
         - 'nmap'
+        - 'bat'
 
     - name: 'Install Homebrew Cask applications'
       homebrew_cask:
