@@ -34,6 +34,10 @@ else
   brew install ansible
 fi
 
+# Install requirements
+log 'Installing requirements'
+ansible-galaxy install -r requirements.yml
+
 # Run ansible scripts
 log 'Running Ansible'
 ansible-playbook ansible.yml
