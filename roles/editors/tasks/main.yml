@@ -1,0 +1,11 @@
+---
+- name: 'Import jgkim.atom role'
+  include_role:
+    name: 'jgkim.atom'
+
+- name: 'Install GUI editors'
+  homebrew_cask:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'intellij-idea'
