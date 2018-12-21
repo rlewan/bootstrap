@@ -99,6 +99,7 @@
         - 'intellij-idea'
         - 'virtualbox'
         - 'postman'
+        - 'wireshark'
 
     - name: 'Copy iTerm2 configuration'
       copy:
