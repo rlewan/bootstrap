@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 
 # Coloured logging
 COLOUR='\033[1;32m'

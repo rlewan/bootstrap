@@ -7,7 +7,7 @@ Utilizes [Ansible](https://www.ansible.com/) to setup a development machine (ass
 From the command line do
 
 ```bash
-$ ./provision
+$ ./provision.sh
 ```
 
 This will:
