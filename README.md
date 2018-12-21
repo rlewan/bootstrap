@@ -13,7 +13,7 @@ $ ./provision
 This will:
 - install [Homebrew](https://brew.sh/),
 - install [Ansible](https://www.ansible.com/),
-- execute the `ansible.yml` playbook to perform remaining setup.
+- execute `playbook.yml` to perform remaining setup via Ansible.
 
 ## Caveats
 
