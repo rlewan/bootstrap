@@ -11,6 +11,7 @@
 
   roles:
     - { role: jgkim.atom }
+    - { role: virtualization }
 
   handlers:
     - name: 'Reload iTerm2 configuration'
@@ -97,10 +98,8 @@
         - 'spotify'
         - 'iterm2'
         - 'intellij-idea'
-        - 'virtualbox'
         - 'postman'
         - 'wireshark'
-        - 'docker'
 
     - name: 'Copy iTerm2 configuration'
       copy:
