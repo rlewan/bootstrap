@@ -62,16 +62,6 @@
       with_fileglob:
         - 'utils/*'
 
-    - name: 'Install Vundle (Open vim and run :PluginInstall afterwards to install defined plugins)'
-      git:
-        repo: 'https://github.com/VundleVim/Vundle.vim.git'
-        dest: '~/.vim/bundle/Vundle.vim'
-
-    - name: 'Copy .vimrc file to the home directory'
-      copy:
-        src: 'vim/.vimrc'
-        dest: '~'
-
     - name: 'Install Homebrew packages'
       homebrew:
         name: '{{ item }}'
