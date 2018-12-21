@@ -10,9 +10,9 @@
       - editorconfig
 
   roles:
-    - { role: jgkim.atom }
-    - { role: virtualization }
-    - { role: browsers }
+    - 'jgkim.atom'
+    - 'virtualization'
+    - 'browsers'
 
   handlers:
     - name: 'Reload iTerm2 configuration'
