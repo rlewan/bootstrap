@@ -36,10 +36,20 @@
     path: '~/bin'
     state: 'directory'
 
-- name: 'Copy utilities into the ~/bin folder'
+- name: 'Copy custom utility scripts into the ~/bin folder'
   copy:
     src: '{{ item }}'
     dest: '~/bin'
     mode: '0744'
   with_fileglob:
     - 'utils/*'
+
+- name: 'Install common utility software'
+  homebrew:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'bash-completion'
+    - 'wget'
+    - 'bat'
+    - 'unrar'

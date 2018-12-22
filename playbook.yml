@@ -33,11 +33,7 @@
         name: '{{ item }}'
         state: 'present'
       with_items:
-        - 'bash-completion'
-        - 'wget'
         - 'nmap'
-        - 'bat'
-        - 'unrar'
 
     - name: 'Install Homebrew Cask applications'
       homebrew_cask:
