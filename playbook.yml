@@ -4,11 +4,12 @@
   connection: 'local'
 
   roles:
+    - 'terminal'
+    - 'ssh'
     - 'virtualization'
     - 'browsers'
     - 'editors'
-    - 'terminal'
-    - 'ssh'
     - 'networking'
+    - 'development-platforms'
     - 'productivity'
     - 'ui'

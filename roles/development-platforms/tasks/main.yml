@@ -1,0 +1,5 @@
+---
+- name: 'Node.js'
+  include_role:
+    name: 'node'
+  when: 'node_enabled'
