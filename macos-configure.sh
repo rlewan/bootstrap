@@ -54,5 +54,6 @@ fi
 # Update the value if it has changed
 if [[ "$CHANGED" == "true" ]]
 then
+  defaults write ${DOMAIN} ${KEY} -${TYPE} ${VALUE}
   echo "changed"
 fi
