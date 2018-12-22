@@ -28,24 +28,6 @@
         dest: '~/.ssh'
         force: 'no'
 
-    - name: 'Copy shell bootstrap files to the home directory'
-      copy:
-        src: 'shell/{{ item }}'
-        dest: '~'
-      with_items:
-        - '.bashrc'
-        - '.bash_profile'
-        - '.bash_bootstrap'
-
-    - name: 'Ensure fluid project and tooling related bootstrap files are present in the home directory'
-      copy:
-        src: 'shell/{{ item }}'
-        dest: '~'
-        force: 'no'
-      with_items:
-        - '.bash_projects'
-        - '.bash_tools'
-
     - name: 'Ensure ~/bin folder is present'
       file:
         path: '~/bin'
