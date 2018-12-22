@@ -1,6 +1,6 @@
 # Development machine bootstrap
 
-Utilizes [Ansible](https://www.ansible.com/) to setup a development machine (assumes it will be a macOS system).
+Utilizes [Ansible](https://www.ansible.com/) to setup a macOS development machine.
 
 ## Usage
 
