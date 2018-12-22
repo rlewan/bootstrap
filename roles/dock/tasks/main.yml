@@ -1,0 +1,6 @@
+---
+- name: 'Enable auto hiding'
+  shell: './macos-configure.sh boolean com.apple.dock autohide true'
+  register: 'entry_update'
+  changed_when: 'entry_update.stdout == "changed"'
+  notify: 'Restart the dock'
