@@ -8,26 +8,9 @@
     - 'browsers'
     - 'editors'
     - 'terminal'
+    - 'ssh'
 
   tasks:
-    - name: 'Determine current user'
-      command: 'whoami'
-      register: 'current_user'
-      changed_when: 'False'
-
-    - name: 'Ensure SSH key is available'
-      user:
-        name: '{{ current_user.stdout }}'
-        generate_ssh_key: 'yes'
-        ssh_key_bits: '4096'
-        ssh_key_file: '~/.ssh/id_rsa'
-
-    - name: 'Ensure base SSH config is available'
-      copy:
-        src: 'ssh/config'
-        dest: '~/.ssh'
-        force: 'no'
-
     - name: 'Install Homebrew packages'
       homebrew:
         name: '{{ item }}'
