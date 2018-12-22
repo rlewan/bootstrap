@@ -10,11 +10,4 @@
     - 'terminal'
     - 'ssh'
     - 'networking'
-
-  tasks:
-    - name: 'Install Homebrew Cask applications'
-      homebrew_cask:
-        name: '{{ item }}'
-        state: 'present'
-      with_items:
-        - 'spotify'
+    - 'productivity'
