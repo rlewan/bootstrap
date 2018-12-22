@@ -4,10 +4,10 @@ Utilizes [Ansible](https://www.ansible.com/) to setup a development machine (ass
 
 ## Usage
 
-From the command line do
+From the command line:
 
 ```bash
-$ ./provision.sh
+$ ./bootstrap.sh
 ```
 
 This will:
