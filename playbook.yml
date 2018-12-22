@@ -28,19 +28,6 @@
         dest: '~/.ssh'
         force: 'no'
 
-    - name: 'Ensure ~/bin folder is present'
-      file:
-        path: '~/bin'
-        state: 'directory'
-
-    - name: 'Copy utilities into the ~/bin folder'
-      copy:
-        src: '{{ item }}'
-        dest: '~/bin'
-        mode: '0744'
-      with_fileglob:
-        - 'utils/*'
-
     - name: 'Install Homebrew packages'
       homebrew:
         name: '{{ item }}'
