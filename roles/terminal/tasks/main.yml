@@ -1,0 +1,14 @@
+---
+- name: 'Install iTerm2 terminal emulator'
+  homebrew_cask:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'iterm2'
+
+- name: 'Copy iTerm2 configuration'
+  copy:
+    src: 'iTerm2/com.googlecode.iterm2.plist'
+    dest: '~/Library/Preferences'
+  notify:
+    - 'Reload iTerm2 configuration'

@@ -7,10 +7,7 @@
     - 'virtualization'
     - 'browsers'
     - 'editors'
-
-  handlers:
-    - name: 'Reload iTerm2 configuration'
-      command: 'defaults read ~/Library/Preferences/com.googlecode.iterm2.plist'
+    - 'terminal'
 
   tasks:
     - name: 'Determine current user'
@@ -79,13 +76,5 @@
         state: 'present'
       with_items:
         - 'spotify'
-        - 'iterm2'
         - 'postman'
         - 'wireshark'
-
-    - name: 'Copy iTerm2 configuration'
-      copy:
-        src: 'iTerm2/com.googlecode.iterm2.plist'
-        dest: '~/Library/Preferences'
-      notify:
-        - 'Reload iTerm2 configuration'
