@@ -15,6 +15,17 @@ function log-single {
   echo -en "${COLOUR}${1}${CLEAR}"
 }
 
+# Check if Xcode and developer tools are installed or not
+log-single 'Checking for Xcode... '
+if [[ -d "/Applications/Xcode.app" ]]
+then
+  log 'Xcode is available'
+else
+  log 'Xcode is not available, triggering installation dialog'
+  nohup xcode-select --install &>/dev/null
+  exit 1
+fi
+
 # Check if Homebrew is available and install if not
 log-single 'Checking for Homebrew... '
 if [ -n "$(command -v brew)" ]
