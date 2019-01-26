@@ -2,3 +2,8 @@
 - name: 'Configure the dock'
   include_role:
     name: 'dock'
+
+- name: 'Enable dark mode'
+  shell: './set-dark-mode.sh'
+  register: 'theme_update'
+  changed_when: 'theme_update.stdout == "Enabled dark mode"'
