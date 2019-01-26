@@ -11,6 +11,7 @@ $ ./bootstrap.sh
 ```
 
 This will:
+- prompt Xcode installation,
 - install [Homebrew](https://brew.sh/),
 - install [Ansible](https://www.ansible.com/),
 - execute `playbook.yml` to perform remaining setup via Ansible.
