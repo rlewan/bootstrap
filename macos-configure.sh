@@ -25,7 +25,7 @@ VALUE="$4"
 
 # Check if the value has to be changed
 CHANGED="false"
-CURRENT_VALUE="$(defaults read ${DOMAIN} ${KEY})"
+CURRENT_VALUE="$(defaults read "${DOMAIN}" "${KEY}")"
 
 if [[ "$TYPE" == "boolean" ]]
 then
@@ -54,6 +54,6 @@ fi
 # Update the value if it has changed
 if [[ "$CHANGED" == "true" ]]
 then
-  defaults write ${DOMAIN} ${KEY} -${TYPE} ${VALUE}
+  defaults write "${DOMAIN}" "${KEY}" -${TYPE} "${VALUE}"
   echo "changed"
 fi
