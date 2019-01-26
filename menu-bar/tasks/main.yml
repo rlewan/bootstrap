@@ -1,0 +1,6 @@
+---
+- name: 'Show battery percentage'
+  shell: './macos-configure.sh string com.apple.menuextra.battery ShowPercent YES'
+  register: 'entry_update'
+  changed_when: 'entry_update.stdout == "changed"'
+  notify: 'Restart SystemUIServer'

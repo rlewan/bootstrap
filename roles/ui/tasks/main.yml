@@ -1,7 +1,11 @@
 ---
-- name: 'Configure the dock'
+- name: 'Configure dock'
   include_role:
     name: 'dock'
+
+- name: 'Configure menu bar'
+  include_role:
+    name: 'menu-bar'
 
 - name: 'Enable dark mode'
   shell: './set-dark-mode.sh'
