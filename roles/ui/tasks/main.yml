@@ -11,3 +11,14 @@
   shell: './set-dark-mode.sh'
   register: 'theme_update'
   changed_when: 'theme_update.stdout == "Enabled dark mode"'
+
+- name: 'Ensure Pictures directory is present'
+  file:
+    path: '~/Pictures'
+    state: 'directory'
+
+- name: 'Copy the wallpaper over'
+  copy:
+    src: 'the-best-wallpaper.jpg'
+    dest: '~/Pictures'
+    force: 'no'
