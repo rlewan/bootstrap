@@ -40,3 +40,9 @@
   register: 'entry_update'
   changed_when: 'entry_update.stdout == "changed"'
   notify: 'Restart the dock'
+
+- name: 'Start screen saver with bottom-right hot corner'
+  shell: './macos-configure.sh integer com.apple.dock wvous-br-corner 5'
+  register: 'entry_update'
+  changed_when: 'entry_update.stdout == "changed"'
+  notify: 'Restart the dock'
