@@ -5,6 +5,7 @@
     state: 'present'
   with_items:
     - 'nmap'
+    - 'iftop'
 
 - name: 'Install GUI applications'
   homebrew_cask:
@@ -13,3 +14,14 @@
   with_items:
     - 'postman'
     - 'wireshark'
+
+- name: 'Ensure ~/bin folder is present'
+  file:
+    path: '~/bin'
+    state: 'directory'
+
+- name: 'Link iftop to make it accessible on the command line'
+  file:
+    src: '/usr/local/sbin/iftop'
+    dest: '~/bin/iftop'
+    state: 'link'
