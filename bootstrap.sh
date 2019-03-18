@@ -21,8 +21,8 @@ if [[ -d "/Applications/Xcode.app" ]]
 then
   log 'Xcode is available'
 else
-  log 'Xcode is not available, triggering installation dialog'
-  nohup xcode-select --install &>/dev/null
+  log 'Xcode is not available, install it through App Store'
+  nohup open -a "App Store"
   exit 1
 fi
 
