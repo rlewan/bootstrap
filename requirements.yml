@@ -1,1 +1,4 @@
-- src: 'jgkim.atom'
+- src: 'https://github.com/jf-forks/ansible-role-atom'
+  version: 'master'
+  name: 'jgkim.atom'
+
