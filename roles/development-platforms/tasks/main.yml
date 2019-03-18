@@ -3,3 +3,9 @@
   include_role:
     name: 'node'
   when: 'node_enabled'
+
+- name: 'JVM'
+  include_role:
+    name: 'java'
+  when: 'jdk_enabled'
+

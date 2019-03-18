@@ -1,0 +1,16 @@
+---
+- name: 'Install JDK'
+  homebrew_cask:
+    name: 'java'
+    state: 'present'
+
+- name: 'Ensure ~/bin folder is present'
+  file:
+    path: '~/bin'
+    state: 'directory'
+
+- name: 'Symlink /usr/libexec/java_home'
+  file:
+    src: '/usr/libexec/java_home'
+    dest: '~/bin/java_home'
+    state: 'link'
