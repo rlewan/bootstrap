@@ -25,7 +25,7 @@ VALUE="$4"
 
 # Check if the value has to be changed
 CHANGED="false"
-CURRENT_VALUE="$(defaults read "${DOMAIN}" "${KEY}")"
+CURRENT_VALUE="$(defaults read "${DOMAIN}" "${KEY}" || echo -n "")"
 
 if [[ "$TYPE" == "boolean" ]]
 then
