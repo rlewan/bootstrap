@@ -10,6 +10,7 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'editorconfig/editorconfig-vim'
+Plugin 'udalov/kotlin-vim'
 
 call vundle#end()
 filetype plugin indent on
