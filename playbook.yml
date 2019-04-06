@@ -4,13 +4,23 @@
   connection: 'local'
 
   roles:
-    - 'terminal'
-    - 'ssh'
-    - 'git'
-    - 'virtualization'
-    - 'browsers'
-    - 'editors'
-    - 'networking'
-    - 'development-platforms'
-    - 'productivity'
-    - 'ui'
+    - role: 'terminal'
+      tags: ['terminal']
+    - role: 'ssh'
+      tags: ['ssh']
+    - role: 'git'
+      tags: ['git']
+    - role: 'virtualization'
+      tags: ['virtualization']
+    - role: 'browsers'
+      tags: ['browsers']
+    - role: 'editors'
+      tags: ['editors']
+    - role: 'networking'
+      tags: ['networking']
+    - role: 'development-platforms'
+      tags: ['development', 'development-platforms']
+    - role: 'productivity'
+      tags: ['productivity']
+    - role: 'ui'
+      tags: ['ui']

@@ -52,4 +52,5 @@ ansible-galaxy install -r requirements.yml
 
 # Run ansible scripts
 log 'Running Ansible'
-ansible-playbook playbook.yml
+ansible-playbook playbook.yml $@
+
