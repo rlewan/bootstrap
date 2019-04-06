@@ -1,0 +1,6 @@
+---
+- name: 'Ensure Git configuration is present'
+  copy:
+    src: '.gitconfig'
+    dest: '~'
+    force: 'no'

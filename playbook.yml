@@ -6,6 +6,7 @@
   roles:
     - 'terminal'
     - 'ssh'
+    - 'git'
     - 'virtualization'
     - 'browsers'
     - 'editors'
