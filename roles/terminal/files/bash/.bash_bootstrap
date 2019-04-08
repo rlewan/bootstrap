@@ -31,15 +31,19 @@ YELLOW="\033[33;1m"
 LIGHT_RED="\033[91m"
 CLEAR="\033[0m"
 
+ITALIC="\033[3m"
+
 # Prompt customization
 
 function git_prompt {
   if [[ -d '.git' ]]
   then
-    echo -en "${LIGHT_RED}(git: $(git branch | grep '*' | sed 's/\* //g')"
-    if [[ -n "$(git status -s)" ]]
+    echo -en "${LIGHT_RED}(git: "
+    if [[ -z "$(git status -s)" ]]
     then
-      echo -en "${GREEN}*"
+      echo -en "$(git branch | grep '*' | sed 's/\* //g')"
+    else
+      echo -en "${ITALIC}$(git branch | grep '*' | sed 's/\* //g')${GREEN}*${CLEAR}"
     fi
     echo -en "${LIGHT_RED})"
   fi
