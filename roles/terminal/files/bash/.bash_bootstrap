@@ -26,23 +26,23 @@ export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 alias grep='grep --color=auto'
 
-GREEN="\e[32m"
-YELLOW="\e[33;1m"
-LIGHT_RED="\e[91m"
-CLEAR="\e[0m"
+GREEN="\033[32m"
+YELLOW="\033[33;1m"
+LIGHT_RED="\033[91m"
+CLEAR="\033[0m"
 
 # Prompt customization
 
 function git_prompt {
   if [[ -d '.git' ]]
   then
-    echo -n "(git: $(git branch | grep '*' | sed 's/\* //g')"
+    echo -en "${LIGHT_RED}(git: $(git branch | grep '*' | sed 's/\* //g')"
     if [[ -n "$(git status -s)" ]]
     then
-      echo -n "*"
+      echo -en "${GREEN}*"
     fi
-    echo -n ")"
+    echo -en "${LIGHT_RED})"
   fi
 }
 
-export PS1="${GREEN}\u@\h: ${YELLOW}\w ${LIGHT_RED}\$(git_prompt)${CLEAR}\n\$ "
+export PS1="${GREEN}\u@\h: ${YELLOW}\w \$(git_prompt)${CLEAR}\n\$ "
