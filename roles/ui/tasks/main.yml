@@ -21,4 +21,4 @@
   copy:
     src: 'the-best-wallpaper.jpg'
     dest: '~/Pictures'
-    force: 'no'
+  notify: 'Desktop picture changed'
