@@ -36,7 +36,12 @@ CLEAR="\e[0m"
 function git_prompt {
   if [[ -d '.git' ]]
   then
-    echo "(git: $(git branch | grep '*' | sed 's/\* //g'))"
+    echo -n "(git: $(git branch | grep '*' | sed 's/\* //g')"
+    if [[ -n "$(git status -s)" ]]
+    then
+      echo -n "*"
+    fi
+    echo -n ")"
   fi
 }
 
