@@ -29,6 +29,7 @@ alias grep='grep --color=auto'
 GREEN="\033[32m"
 YELLOW="\033[33;1m"
 LIGHT_RED="\033[91m"
+GRAY="\033[90m"
 CLEAR="\033[0m"
 
 ITALIC="\033[3m"
@@ -45,8 +46,12 @@ function git_prompt {
     else
       echo -en "${ITALIC}$(git branch | grep '*' | sed 's/\* //g')${GREEN}*${CLEAR}"
     fi
-    echo -en "${LIGHT_RED})"
+    echo -en "${LIGHT_RED}) "
   fi
 }
 
-export PS1="${GREEN}\u@\h: ${YELLOW}\w \$(git_prompt)${CLEAR}\n\$ "
+function terminal_date {
+  echo -n "($(date +"%b %e %T"))"
+}
+
+export PS1="${GREEN}\u@\h: ${YELLOW}\w \$(git_prompt)${GRAY}\$(terminal_date)${CLEAR}\n\$ "
