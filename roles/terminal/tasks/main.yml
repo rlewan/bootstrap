@@ -54,4 +54,7 @@
     - 'bat'
     - 'unrar'
     - 'watch'
-
+    - 'pstree'
+    - 'jq'
+    - 'glances'
+    - 'tree'

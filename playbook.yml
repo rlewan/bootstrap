@@ -17,7 +17,7 @@
     - role: 'editors'
       tags: ['editors']
     - role: 'networking'
-      tags: ['networking']
+      tags: ['networking', 'net', 'network']
     - role: 'development-platforms'
       tags: ['development', 'development-platforms']
     - role: 'productivity'

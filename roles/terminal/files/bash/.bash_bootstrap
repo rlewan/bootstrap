@@ -1,6 +1,8 @@
 # Add custom utilities directory to the path
 export PATH="$PATH:~/bin"
 
+# Add brew sbin folder to the path
+export PATH="$PATH:/usr/local/sbin"
 
 # Bash completion
 if [ -n "$(command -v brew)" ]
