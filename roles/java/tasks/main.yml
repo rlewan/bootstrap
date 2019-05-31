@@ -1,7 +1,16 @@
 ---
-- name: 'Install JDK'
+- name: 'Enable AdoptOpenJDK/openjdk'
+  homebrew_tap:
+    name: 'AdoptOpenJDK/openjdk'
+
+- name: 'Install latest Homebrew JDK'
   homebrew_cask:
     name: 'java'
+    state: 'present'
+
+- name: 'Install AdoptOpenJDK/8'
+  homebrew_cask:
+    name: 'adoptopenjdk8'
     state: 'present'
 
 - name: 'Ensure ~/bin folder is present'
@@ -14,3 +23,13 @@
     src: '/usr/libexec/java_home'
     dest: '~/bin/java_home'
     state: 'link'
+
+- name: 'Copy Java shell configuration'
+  copy:
+    src: '.bash_java'
+    dest: '~'
+
+- name: 'Bootstrap Java shell configuration'
+  shell: './setup-java.sh'
+  register: 'java_setup'
+  changed_when: 'java_setup.stdout == "Java configured"'

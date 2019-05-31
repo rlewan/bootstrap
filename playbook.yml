@@ -20,6 +20,8 @@
       tags: ['networking', 'net', 'network']
     - role: 'development-platforms'
       tags: ['development', 'development-platforms']
+    - role: 'java'
+      tags: ['java', 'jdk', 'jvm']
     - role: 'productivity'
       tags: ['productivity']
     - role: 'ui'
