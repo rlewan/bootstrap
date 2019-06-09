@@ -1,0 +1,11 @@
+---
+- name: 'Install GCP CLI'
+  homebrew_cask:
+    name: 'google-cloud-sdk'
+    state: 'present'
+
+- name: 'Install Kubernetes CLI'
+  homebrew:
+    name: 'kubernetes-cli'
+    state: 'installed'
+  notify: 'Link kubectl'
