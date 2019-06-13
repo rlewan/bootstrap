@@ -1,7 +1,10 @@
 ---
-- name: 'Enable AdoptOpenJDK/openjdk'
+- name: 'Enable required Homebrew taps'
   homebrew_tap:
-    name: 'AdoptOpenJDK/openjdk'
+    name: '{{ item }}'
+  with_items:
+    - 'AdoptOpenJDK/openjdk'
+    - 'shyiko/ktlint'
 
 - name: 'Install latest Homebrew JDK'
   homebrew_cask:
@@ -33,3 +36,8 @@
   shell: './setup-jvm.sh'
   register: 'jvm_setup'
   changed_when: 'jvm_setup.stdout == "JVM configured"'
+
+- name: 'Install ktlint'
+  homebrew:
+    name: 'shyiko/ktlint/ktlint'
+    state: 'present'
