@@ -26,10 +26,10 @@
 
 - name: 'Copy Java shell configuration'
   copy:
-    src: '.bash_java'
+    src: '.bash_jvm'
     dest: '~'
 
 - name: 'Bootstrap Java shell configuration'
-  shell: './setup-java.sh'
-  register: 'java_setup'
-  changed_when: 'java_setup.stdout == "Java configured"'
+  shell: './setup-jvm.sh'
+  register: 'jvm_setup'
+  changed_when: 'jvm_setup.stdout == "JVM configured"'
