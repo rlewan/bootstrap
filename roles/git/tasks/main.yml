@@ -4,3 +4,20 @@
     src: '.gitconfig'
     dest: '~'
     force: 'no'
+
+- name: 'Install git-duet tap'
+  homebrew_tap:
+    name: 'git-duet/tap'
+
+- name: 'Install git-duet'
+  homebrew:
+    name: 'git-duet'
+
+- name: 'Add git aliases'
+  git_config:
+    name: "alias.{{ item.key }}"
+    scope: global
+    value: "{{ item.value }}"
+  with_dict:
+    ci: 'duet-commit -v'
+    st: 'status'
