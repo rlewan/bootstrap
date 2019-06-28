@@ -9,3 +9,8 @@
     name: 'kubernetes-cli'
     state: 'installed'
   notify: 'Link kubectl'
+
+- name: 'Install Terraform'
+  homebrew:
+    name: 'terraform'
+    state: 'installed'
