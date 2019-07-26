@@ -6,6 +6,6 @@
 
 - name: 'JVM'
   include_role:
-    name: 'java'
+    name: 'jvm'
   when: 'jdk_enabled'
 
