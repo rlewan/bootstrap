@@ -39,30 +39,6 @@ alias grep='grep --color=auto'
 
 GREEN="\033[32m"
 YELLOW="\033[33;1m"
-LIGHT_MAGENTA="\033[95m"
-GRAY="\033[90m"
 CLEAR="\033[0m"
 
-ITALIC="\033[3m"
-
-# Prompt customization
-
-function git_prompt {
-  if [[ -d '.git' ]]
-  then
-    echo -en "${LIGHT_MAGENTA}(git: "
-    if [[ -z "$(git status -s)" ]]
-    then
-      echo -en "$(git branch | grep '*' | sed 's/\* //g')"
-    else
-      echo -en "${ITALIC}$(git branch | grep '*' | sed 's/\* //g')${GREEN}*${CLEAR}"
-    fi
-    echo -en "${LIGHT_MAGENTA}) "
-  fi
-}
-
-function terminal_date {
-  echo -n "($(date +"%b %e %T"))"
-}
-
-export PS1="${GREEN}\u@\h: ${YELLOW}\w \$(git_prompt)${GRAY}\$(terminal_date)${CLEAR}\n\$ "
+export PS1="${GREEN}\u@\h: ${YELLOW}\w ${CLEAR}\n\$ "
