@@ -19,7 +19,7 @@
     - role: 'networking'
       tags: ['networking', 'net', 'network']
     - role: 'development-platforms'
-      tags: ['development', 'development-platforms']
+      tags: ['development', 'development-platforms', 'dev']
     - role: 'jvm'
       tags: ['java', 'jdk', 'jvm']
     - role: 'productivity'

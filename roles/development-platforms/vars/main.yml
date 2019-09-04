@@ -1,3 +1,4 @@
 ---
 node_enabled: 'true'
 jdk_enabled: 'true'
+go_enabled: 'true'
