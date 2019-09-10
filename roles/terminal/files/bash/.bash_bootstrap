@@ -26,6 +26,10 @@ function g {
     fi
 }
 
+function next-uuid {
+  uuidgen | awk '{ print tolower($0) }' | tr -d '\n' | pbcopy
+}
+
 # Aliases
 alias la='ls -a'
 alias ll='ls -lha'
