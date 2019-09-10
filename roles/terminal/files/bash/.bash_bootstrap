@@ -27,7 +27,10 @@ function g {
 }
 
 function next-uuid {
-  uuidgen | awk '{ print tolower($0) }' | tr -d '\n' | pbcopy
+  nextVal="$(uuidgen | awk '{ print tolower($0) }' | tr -d '\n')"
+  echo -n "$nextVal" | pbcopy
+  echo "New UUID '$nextVal' copied to clipboard"
+  echo
 }
 
 # Aliases
