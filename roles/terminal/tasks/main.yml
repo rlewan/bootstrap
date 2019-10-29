@@ -58,3 +58,4 @@
     - 'jq'
     - 'glances'
     - 'tree'
+    - 'coreutils'
