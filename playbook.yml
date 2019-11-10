@@ -28,3 +28,6 @@
       tags: ['ui']
     - role: 'cloud'
       tags: ['cloud', 'gcp', 'kubernetes', 'k8s']
+    - role: 'photo'
+      tags: ['photography', 'photo']
+
