@@ -4,6 +4,9 @@ export PATH="$PATH:~/bin"
 # Add brew sbin folder to the path
 export PATH="$PATH:/usr/local/sbin"
 
+# Silence macOS Cataline ZSH warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # Bash completion
 if [[ -n "$(command -v brew)" ]]
 then
