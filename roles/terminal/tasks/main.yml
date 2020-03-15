@@ -6,12 +6,15 @@
   with_items:
     - 'iterm2'
 
-- name: 'Copy iTerm2 configuration'
+- name: 'Ensure "~/Library/Application Support/iTerm2/DynamicProfiles" folder is present'
+  file:
+    path: '~/Library/Application Support/iTerm2/DynamicProfiles'
+    state: 'directory'
+
+- name: 'Copy iTerm2 dynamic profiles'
   copy:
-    src: 'iTerm2/com.googlecode.iterm2.plist'
-    dest: '~/Library/Preferences'
-  notify:
-    - 'Reload iTerm2 configuration'
+    src: 'iTerm2/profiles.json'
+    dest: '~/Library/Application Support/iTerm2/DynamicProfiles'
 
 - name: 'Copy shell bootstrap files to the home directory'
   copy:
