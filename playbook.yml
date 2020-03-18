@@ -23,7 +23,7 @@
     - role: 'jvm'
       tags: ['java', 'jdk', 'jvm']
     - role: 'productivity'
-      tags: ['productivity']
+      tags: ['productivity', 'apps']
     - role: 'ui'
       tags: ['ui']
     - role: 'cloud'
