@@ -6,11 +6,6 @@
     - 'AdoptOpenJDK/openjdk'
     - 'shyiko/ktlint'
 
-- name: 'Install latest Homebrew JDK'
-  homebrew_cask:
-    name: 'java'
-    state: 'present'
-
 - name: 'Install AdoptOpenJDK/8'
   homebrew_cask:
     name: 'adoptopenjdk8'
