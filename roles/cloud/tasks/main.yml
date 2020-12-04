@@ -10,7 +10,7 @@
     state: 'installed'
   notify: 'Link kubectl'
 
-- name: 'Install Terraform'
+- name: 'Install tfenv'
   homebrew:
-    name: 'terraform'
+    name: 'tfenv'
     state: 'installed'
