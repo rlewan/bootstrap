@@ -1,4 +1,8 @@
 ---
+node_enabled: 'true'
+jdk_enabled: 'true'
+go_enabled: 'true'
+
 atom_upgrade_all: True
 atom_packages:
   - intellij-idea-keymap

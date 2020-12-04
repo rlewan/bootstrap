@@ -1,0 +1,79 @@
+---
+- name: 'Terminal'
+  include_role:
+    name: 'terminal'
+
+- name: 'Git'
+  include_role:
+    name: 'git'
+
+- name: 'SSH'
+  include_role:
+    name: 'ssh'
+
+- name: 'Node.js'
+  include_role:
+    name: 'node'
+  when: 'node_enabled'
+
+- name: 'JVM'
+  include_role:
+    name: 'jvm'
+  when: 'jdk_enabled'
+
+- name: 'Go'
+  include_role:
+    name: 'go'
+  when: 'go_enabled'
+
+- name: 'Cloud'
+  include_role:
+    name: 'cloud'
+
+- name: 'Install GUI editors'
+  homebrew_cask:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'intellij-idea'
+    - 'atom'
+
+- name: 'Import jgkim.atom role'
+  include_role:
+    name: 'jgkim.atom'
+
+- name: 'Copy .vimrc file to the home directory'
+  copy:
+    src: '.vimrc'
+    dest: '~'
+
+- name: 'Install Vundle (Open vim and run :PluginInstall afterwards to install defined plugins)'
+  git:
+    repo: 'https://github.com/VundleVim/Vundle.vim.git'
+    dest: '~/.vim/bundle/Vundle.vim'
+
+- name: 'Install networking command line software'
+  homebrew:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'nmap'
+    - 'iftop'
+    - 'mtr'
+    - 'jmeter'
+
+- name: 'Install networking apps'
+  homebrew_cask:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'postman'
+    - 'wireshark'
+
+- name: 'Install virtualization software'
+  homebrew_cask:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'virtualbox'
+    - 'docker'

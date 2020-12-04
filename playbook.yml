@@ -8,21 +8,5 @@
       tags: [ 'mac' ]
     - role: 'apps'
       tags: [ 'apps' ]
-    - role: 'terminal'
-      tags: ['terminal']
-    - role: 'ssh'
-      tags: ['ssh']
-    - role: 'git'
-      tags: ['git']
-    - role: 'virtualization'
-      tags: ['virtualization']
-    - role: 'editors'
-      tags: ['editors']
-    - role: 'networking'
-      tags: ['networking', 'net', 'network']
-    - role: 'development-platforms'
-      tags: ['development', 'development-platforms', 'dev']
-    - role: 'jvm'
-      tags: ['java', 'jdk', 'jvm']
-    - role: 'cloud'
-      tags: ['cloud', 'gcp', 'kubernetes', 'k8s']
+    - role: 'engineering'
+      tags: ['engineering', 'eng', 'development', 'dev']
