@@ -16,5 +16,3 @@
   with_items:
     - 'postman'
     - 'wireshark'
-    - 'expressvpn'
-    - 'transmission'

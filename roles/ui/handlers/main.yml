@@ -1,4 +1,0 @@
----
-- name: 'Desktop picture changed'
-  command: |
-    osascript -e 'tell application "System Events" to tell every desktop to set picture to "~/Pictures/the-best-wallpaper.jpg"'

@@ -12,3 +12,14 @@
     - 'flycut'
     - 'vlc'
     - 'telegram'
+    - 'google-chrome'
+    - 'firefox'
+    - 'expressvpn'
+    - 'transmission'
+
+- name: 'Install command line stuff'
+  homebrew:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'exiftool'

@@ -4,6 +4,10 @@
   connection: 'local'
 
   roles:
+    - role: 'mac'
+      tags: [ 'mac' ]
+    - role: 'apps'
+      tags: [ 'apps' ]
     - role: 'terminal'
       tags: ['terminal']
     - role: 'ssh'
@@ -12,8 +16,6 @@
       tags: ['git']
     - role: 'virtualization'
       tags: ['virtualization']
-    - role: 'browsers'
-      tags: ['browsers']
     - role: 'editors'
       tags: ['editors']
     - role: 'networking'
@@ -22,12 +24,5 @@
       tags: ['development', 'development-platforms', 'dev']
     - role: 'jvm'
       tags: ['java', 'jdk', 'jvm']
-    - role: 'productivity'
-      tags: ['productivity', 'apps']
-    - role: 'ui'
-      tags: ['ui']
     - role: 'cloud'
       tags: ['cloud', 'gcp', 'kubernetes', 'k8s']
-    - role: 'photo'
-      tags: ['photography', 'photo']
-

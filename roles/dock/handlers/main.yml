@@ -1,3 +1,0 @@
----
-- name: 'Restart the dock'
-  command: 'killall Dock'
