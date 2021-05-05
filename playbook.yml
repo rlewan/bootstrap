@@ -10,3 +10,5 @@
       tags: [ 'apps' ]
     - role: 'engineering'
       tags: ['engineering', 'eng', 'development', 'dev']
+    - role: 'git'
+      tags: ['git']

@@ -13,6 +13,12 @@
   homebrew:
     name: 'git-duet'
 
+- name: 'Configure the pull strategy'
+  git_config:
+    name: 'pull.rebase'
+    scope: global
+    value: 'true'
+
 - name: 'Add git aliases'
   git_config:
     name: "alias.{{ item.key }}"
