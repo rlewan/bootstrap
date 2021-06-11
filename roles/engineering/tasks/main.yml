@@ -29,6 +29,7 @@
 - name: 'Cloud'
   include_role:
     name: 'cloud'
+  when: 'cloud_enabled'
 
 - name: 'Install GUI editors'
   homebrew_cask:
