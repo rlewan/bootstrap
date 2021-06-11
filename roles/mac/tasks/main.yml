@@ -1,61 +1,13 @@
 ---
-- name: 'Enable dark mode'
-  shell: './set-dark-mode.sh'
-  register: 'theme_update'
-  changed_when: 'theme_update.stdout == "Enabled dark mode"'
-
 - name: 'Ensure Pictures directory is present'
   file:
     path: '~/Pictures'
     state: 'directory'
 
-- name: 'Show Battery in menu bar'
-  shell: './macos-add-menu-item.sh Battery'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "added"'
-  notify: 'Restart SystemUIServer'
-
-- name: 'Show battery percentage'
-  shell: './macos-configure.sh string com.apple.menuextra.battery ShowPercent YES'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "changed"'
-  notify: 'Restart SystemUIServer'
-
-- name: 'Show Volume in menu bar'
-  shell: './macos-add-menu-item.sh Volume'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "added"'
-  notify: 'Restart SystemUIServer'
-
-- name: 'Show Clock in menu bar'
-  shell: './macos-add-menu-item.sh Clock'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "added"'
-  notify: 'Restart SystemUIServer'
-
-- name: 'Set clock date and time format'
-  shell: './macos-configure.sh string com.apple.menuextra.clock DateFormat "EEE d MMM  HH:mm"'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "changed"'
-  notify: 'Restart SystemUIServer'
-
-- name: 'Disable flashing separators'
-  shell: './macos-configure.sh boolean com.apple.menuextra.clock FlashDateSeparators false'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "changed"'
-  notify: 'Restart SystemUIServer'
-
-- name: 'Use digital clock display'
-  shell: './macos-configure.sh boolean com.apple.menuextra.clock IsAnalog false'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "changed"'
-  notify: 'Restart SystemUIServer'
-
-- name: 'Show Bluetooth in menu bar'
-  shell: './macos-add-menu-item.sh Bluetooth'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "added"'
-  notify: 'Restart SystemUIServer'
+- name: 'Ensure Projects directory is present'
+  file:
+    path: '~/Projects'
+    state: 'directory'
 
 - name: 'Enable dock auto hiding'
   shell: './macos-configure.sh boolean com.apple.dock autohide true'
@@ -89,18 +41,6 @@
 
 - name: 'Disable recent items in dock'
   shell: './macos-configure.sh boolean com.apple.dock show-recents false'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "changed"'
-  notify: 'Restart the dock'
-
-- name: 'Enable app expose gesture'
-  shell: './macos-configure.sh boolean com.apple.dock showAppExposeGestureEnabled true'
-  register: 'entry_update'
-  changed_when: 'entry_update.stdout == "changed"'
-  notify: 'Restart the dock'
-
-- name: 'Start screen saver with bottom-right hot corner'
-  shell: './macos-configure.sh integer com.apple.dock wvous-br-corner 5'
   register: 'entry_update'
   changed_when: 'entry_update.stdout == "changed"'
   notify: 'Restart the dock'

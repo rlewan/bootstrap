@@ -1,5 +1,0 @@
----
-- name: 'Install go'
-  homebrew:
-    name: 'go@1.12'
-    state: 'present'

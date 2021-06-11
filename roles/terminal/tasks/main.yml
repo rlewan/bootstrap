@@ -16,6 +16,12 @@
     src: 'iTerm2/profiles.json'
     dest: '~/Library/Application Support/iTerm2/DynamicProfiles'
 
+- name: Switch to latest BASH
+  user:
+    name: "{{ ansible_env.USER }}"
+    shell: /bin/bash
+  become: yes
+
 - name: 'Copy shell bootstrap files to the home directory'
   copy:
     src: 'bash/{{ item }}'
@@ -55,7 +61,6 @@
     - 'bash-completion'
     - 'wget'
     - 'bat'
-    - 'unrar'
     - 'watch'
     - 'pstree'
     - 'jq'

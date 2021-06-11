@@ -14,22 +14,14 @@
 - name: 'Node.js'
   include_role:
     name: 'node'
-  when: 'node_enabled'
 
 - name: 'JVM'
   include_role:
     name: 'jvm'
-  when: 'jdk_enabled'
-
-- name: 'Go'
-  include_role:
-    name: 'go'
-  when: 'go_enabled'
 
 - name: 'Cloud'
   include_role:
     name: 'cloud'
-  when: 'cloud_enabled'
 
 - name: 'Install GUI editors'
   homebrew_cask:
