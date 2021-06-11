@@ -1,4 +1,8 @@
 ---
+- name: 'Import feffi.macos-computername role'
+  include_role:
+    name: 'feffi.macos-computername'
+
 - name: 'Ensure Pictures directory is present'
   file:
     path: '~/Pictures'
