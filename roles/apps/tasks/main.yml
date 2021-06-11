@@ -18,7 +18,6 @@
     - 'transmission'
     - 'sensiblesidebuttons'
     - 'objektiv'
-    - 'flume'
 
 - name: 'Install command line stuff'
   homebrew:
