@@ -26,6 +26,16 @@ else
   exit 1
 fi
 
+# Check if Rosetta 2 is installed
+log-single 'Checking for Rosetta 2... '
+if [[ -n "$(pgrep oahd)" ]]
+then
+  log 'Rosetta 2 is available'
+else
+  log 'Rosetta 2 is not available, installing'
+  /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+fi
+
 # Check if Homebrew is available and install if not
 PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin"
 log-single 'Checking for Homebrew... '
