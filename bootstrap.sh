@@ -27,6 +27,7 @@ else
 fi
 
 # Check if Homebrew is available and install if not
+PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin"
 log-single 'Checking for Homebrew... '
 if [ -n "$(command -v brew)" ]
 then
