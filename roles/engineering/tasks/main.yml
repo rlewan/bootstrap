@@ -52,7 +52,6 @@
   with_items:
     - 'nmap'
     - 'iftop'
-    - 'mtr'
     - 'jmeter'
 
 - name: 'Install networking apps'
