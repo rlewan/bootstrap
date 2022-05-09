@@ -8,7 +8,6 @@
     - 'simplediagrams'
     - 'whatsapp'
     - 'slack'
-    - 'shiftit'
     - 'flycut'
     - 'vlc'
     - 'telegram'
@@ -20,6 +19,7 @@
     - 'objektiv'
     - '1password'
     - 'messenger'
+    - 'rectangle'
 
 - name: 'Install command line stuff'
   homebrew:
