@@ -12,3 +12,5 @@
       tags: ['engineering', 'eng', 'development', 'dev']
     - role: 'git'
       tags: ['git']
+    - role: 'terminal'
+      tags: ['terminal']

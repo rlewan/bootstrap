@@ -31,6 +31,11 @@
     - '.bash_profile'
     - '.bash_bootstrap'
 
+- name: 'Copy .inputrc to the home directory'
+  copy:
+    src: 'bash/.inputrc'
+    dest: '~'
+
 - name: 'Ensure fluid project and tooling related bootstrap files are present in the home directory'
   copy:
     src: 'bash/{{ item }}'
