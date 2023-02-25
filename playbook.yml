@@ -14,3 +14,5 @@
       tags: ['git']
     - role: 'terminal'
       tags: ['terminal']
+    - role: 'photos'
+      tags: ['photos']
