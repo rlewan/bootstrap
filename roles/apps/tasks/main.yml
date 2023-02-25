@@ -5,9 +5,7 @@
     state: 'present'
   with_items:
     - 'spotify'
-    - 'simplediagrams'
     - 'whatsapp'
-    - 'slack'
     - 'flycut'
     - 'vlc'
     - 'telegram'
