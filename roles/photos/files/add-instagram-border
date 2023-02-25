@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for image_file in "$@"
+do
+    convert "$image_file" -bordercolor "#FAFAFA" -border 5% "bordered-$image_file"
+done
