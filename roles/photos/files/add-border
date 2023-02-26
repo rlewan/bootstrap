@@ -1,6 +1,10 @@
 #!/bin/bash
 
+set -e
+set -o pipefail
+
 for image_file in "$@"
 do
-    convert "$image_file" -bordercolor "#FAFAFA" -border 5% "bordered-$image_file"
+    output_file="$(echo "$image_file" | cut -d '.' -f 1)-2.$(echo "$image_file" | cut -d '.' -f 2)"
+    convert "$image_file" -bordercolor "#FAFAFA" -border 5% "$output_file"
 done
