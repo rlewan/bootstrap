@@ -4,6 +4,9 @@ export PATH="$PATH:~/bin"
 # Add brew folders to the path
 export PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin"
 
+# Add InteliJ IDEA launcher script to path
+export PATH="$PATH:/Applications/IntelliJ IDEA.app/Contents/MacOS"
+
 # Silence macOS Cataline ZSH warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
