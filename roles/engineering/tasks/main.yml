@@ -29,11 +29,6 @@
     state: 'present'
   with_items:
     - 'intellij-idea'
-    - 'atom'
-
-- name: 'Import jgkim.atom role'
-  include_role:
-    name: 'jgkim.atom'
 
 - name: 'Copy .vimrc file to the home directory'
   copy:

@@ -1,5 +1,0 @@
----
-atom_upgrade_all: True
-atom_packages:
-  - intellij-idea-keymap
-  - editorconfig

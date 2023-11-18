@@ -1,6 +1,2 @@
-- src: 'https://github.com/jf-forks/ansible-role-atom'
-  version: '8973d911cd230a0a426045f09b36cce3dad64d80'
-  name: 'jgkim.atom'
-
 - src: 'https://github.com/feffi/ansible-macos-computername.git'
   name: 'feffi.macos-computername'
