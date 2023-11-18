@@ -3,13 +3,16 @@
   homebrew_tap:
     name: '{{ item }}'
   with_items:
-    - 'AdoptOpenJDK/openjdk'
+    - 'homebrew/cask-versions'
     - 'shyiko/ktlint'
 
-- name: 'Install AdoptOpenJDK/8'
+- name: 'Install the JVM'
   homebrew_cask:
-    name: 'adoptopenjdk8'
+    name: '{{ item }}'
     state: 'present'
+  with_items:
+    - 'temurin'
+    - 'temurin21'
 
 - name: 'Ensure ~/bin folder is present'
   file:
