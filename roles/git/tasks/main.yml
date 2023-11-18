@@ -1,9 +1,12 @@
 ---
-- name: 'Ensure Git configuration is present'
-  copy:
-    src: '.gitconfig'
-    dest: '~'
-    force: 'no'
+- name: 'Set user name and email'
+  git_config:
+    scope: 'global'
+    name: "user.{{ item.key }}"
+    value: "{{ item.value }}"
+  with_dict:
+    name: 'Rafał Lewandowski'
+    email: 'rafalowski@protonmail.com'
 
 - name: 'Install git-duet tap'
   homebrew_tap:
@@ -15,14 +18,14 @@
 
 - name: 'Configure the pull strategy'
   git_config:
+    scope: 'global'
     name: 'pull.rebase'
-    scope: global
     value: 'true'
 
 - name: 'Add git aliases'
   git_config:
+    scope: 'global'
     name: "alias.{{ item.key }}"
-    scope: global
     value: "{{ item.value }}"
   with_dict:
     ci: 'duet-commit -v'
