@@ -4,15 +4,17 @@
   connection: 'local'
 
   roles:
-    - role: 'mac'
-      tags: [ 'mac' ]
     - role: 'apps'
       tags: [ 'apps' ]
     - role: 'engineering'
       tags: ['engineering', 'eng', 'development', 'dev']
     - role: 'git'
       tags: ['git']
-    - role: 'terminal'
-      tags: ['terminal']
+    - role: 'mac'
+      tags: [ 'mac' ]
     - role: 'photos'
       tags: ['photos']
+    - role: 'ssh'
+      tags: ['ssh']
+    - role: 'terminal'
+      tags: ['terminal']
