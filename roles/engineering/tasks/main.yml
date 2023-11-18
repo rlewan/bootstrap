@@ -1,16 +1,4 @@
 ---
-- name: 'Terminal'
-  include_role:
-    name: 'terminal'
-
-- name: 'Git'
-  include_role:
-    name: 'git'
-
-- name: 'SSH'
-  include_role:
-    name: 'ssh'
-
 - name: 'Install GUI editors'
   homebrew_cask:
     name: '{{ item }}'
