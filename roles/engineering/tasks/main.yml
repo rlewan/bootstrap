@@ -11,17 +11,9 @@
   include_role:
     name: 'ssh'
 
-- name: 'Node.js'
-  include_role:
-    name: 'node'
-
 - name: 'JVM'
   include_role:
     name: 'jvm'
-
-- name: 'Cloud'
-  include_role:
-    name: 'cloud'
 
 - name: 'Install GUI editors'
   homebrew_cask:
@@ -53,3 +45,34 @@
     state: 'present'
   with_items:
     - 'docker'
+
+# Cloud stuff
+- name: 'Install Kubernetes CLI'
+  homebrew:
+    name: 'kubernetes-cli'
+    state: 'installed'
+  notify: 'Link kubectl'
+
+- name: 'Install tfenv'
+  homebrew:
+    name: 'tfenv'
+    state: 'installed'
+
+# Node.js stuff
+- name: 'Install command line tools'
+  homebrew:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'nvm'
+    - 'yarn'
+
+- name: 'Ensure NVM working directory is present'
+  file:
+    path: '~/.nvm'
+    state: 'directory'
+
+- name: 'Setup NVM'
+  shell: './setup-nvm.sh'
+  register: 'nvm_setup'
+  changed_when: 'nvm_setup.stdout == "NVM configured"'
