@@ -106,9 +106,11 @@
     dest: '~'
 
 - name: 'Bootstrap Java shell configuration'
-  shell: './setup-jvm.sh'
-  register: 'jvm_setup'
-  changed_when: 'jvm_setup.stdout == "JVM configured"'
+  lineinfile:
+    path: '~/.bash_tools'
+    regexp: '^source ~/\.bash_jvm$'
+    line: 'source ~/.bash_jvm'
+    state: 'present'
 
 - name: 'Install ktlint'
   homebrew:
