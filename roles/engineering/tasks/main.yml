@@ -55,7 +55,7 @@
     state: 'installed'
 
 # Node.js stuff
-- name: 'Install command line tools'
+- name: 'Install command line tools for Node.js'
   homebrew:
     name: '{{ item }}'
     state: 'present'
