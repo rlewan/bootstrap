@@ -11,10 +11,6 @@
   include_role:
     name: 'ssh'
 
-- name: 'JVM'
-  include_role:
-    name: 'jvm'
-
 - name: 'Install GUI editors'
   homebrew_cask:
     name: '{{ item }}'
@@ -76,3 +72,45 @@
   shell: './setup-nvm.sh'
   register: 'nvm_setup'
   changed_when: 'nvm_setup.stdout == "NVM configured"'
+
+# JVM stuff
+- name: 'Enable Homebrew taps required to setup the JDKs'
+  homebrew_tap:
+    name: '{{ item }}'
+  with_items:
+    - 'homebrew/cask-versions'
+    - 'shyiko/ktlint'
+
+- name: 'Install the JDK'
+  homebrew_cask:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'temurin'
+    - 'temurin21'
+
+- name: 'Ensure ~/bin folder is present'
+  file:
+    path: '~/bin'
+    state: 'directory'
+
+- name: 'Symlink /usr/libexec/java_home'
+  file:
+    src: '/usr/libexec/java_home'
+    dest: '~/bin/java_home'
+    state: 'link'
+
+- name: 'Copy Java shell configuration'
+  copy:
+    src: '.bash_jvm'
+    dest: '~'
+
+- name: 'Bootstrap Java shell configuration'
+  shell: './setup-jvm.sh'
+  register: 'jvm_setup'
+  changed_when: 'jvm_setup.stdout == "JVM configured"'
+
+- name: 'Install ktlint'
+  homebrew:
+    name: 'shyiko/ktlint/ktlint'
+    state: 'present'
