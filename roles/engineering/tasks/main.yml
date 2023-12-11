@@ -105,3 +105,9 @@
   homebrew:
     name: 'shyiko/ktlint/ktlint'
     state: 'present'
+
+# Haskell stuff
+- name: 'Install GHCup'
+  homebrew:
+    name: 'ghcup'
+    state: 'installed'
