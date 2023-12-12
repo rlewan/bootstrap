@@ -22,4 +22,3 @@ This will:
 The script is not fully automated, i.e. some human input will be required:
 
 - [Xcode](https://developer.apple.com/xcode/) has to be installed manually,
-- [Vundle](https://github.com/VundleVim/Vundle.vim) plugins are not installed automatically, you have to open [Vim](https://www.vim.org/) and run `:PluginInstall` to install them.

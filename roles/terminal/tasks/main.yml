@@ -78,7 +78,8 @@
     src: 'vim/.vimrc'
     dest: '~'
 
-- name: 'Install Vundle (Open vim and run :PluginInstall afterwards to install defined plugins)'
+- name: 'Install Vundle'
   git:
     repo: 'https://github.com/VundleVim/Vundle.vim.git'
     dest: '~/.vim/bundle/Vundle.vim'
+  notify: 'Install Vundle plugins'
