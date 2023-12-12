@@ -11,9 +11,14 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'udalov/kotlin-vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'dense-analysis/ale'
 
 call vundle#end()
 filetype plugin indent on
+
+" =============== Plugins configuration ================
+let g:airline#extensions#ale#enabled = 1
 
 " ==================== Other setup =====================
 
