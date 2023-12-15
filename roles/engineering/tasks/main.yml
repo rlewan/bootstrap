@@ -119,3 +119,12 @@
     block: |
       export PATH="$PATH:~/.ghcup/bin"
     state: 'present'
+
+# Clojure stuff
+- name: 'Install tools for Clojure'
+  homebrew:
+    name: '{{ item }}'
+    state: 'installed'
+  with_items:
+    - 'leiningen'
+    - 'clojure'
