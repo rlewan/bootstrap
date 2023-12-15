@@ -106,20 +106,6 @@
     name: 'shyiko/ktlint/ktlint'
     state: 'present'
 
-# Haskell stuff
-- name: 'Install GHCup'
-  homebrew:
-    name: 'ghcup'
-    state: 'installed'
-
-- name: 'Setup GHCup/Haskell binaries in the shell'
-  blockinfile:
-    path: '~/.bash_tools'
-    marker: '# {mark} ANSIBLE MANAGED GHCUP CONFIG'
-    block: |
-      export PATH="$PATH:~/.ghcup/bin"
-    state: 'present'
-
 # Clojure stuff
 - name: 'Install tools for Clojure'
   homebrew:
