@@ -16,47 +16,10 @@
     src: 'iTerm2/profiles.json'
     dest: '~/Library/Application Support/iTerm2/DynamicProfiles'
 
-- name: Switch to latest BASH
-  user:
-    name: "{{ ansible_env.USER }}"
-    shell: /bin/bash
-  become: yes
-
-- name: 'Copy shell bootstrap files to the home directory'
-  copy:
-    src: 'bash/{{ item }}'
-    dest: '~'
-  with_items:
-    - '.bashrc'
-    - '.bash_profile'
-    - '.bash_bootstrap'
-
 - name: 'Copy .inputrc to the home directory'
   copy:
     src: 'bash/.inputrc'
     dest: '~'
-
-- name: 'Ensure fluid project and tooling related bootstrap files are present in the home directory'
-  copy:
-    src: 'bash/{{ item }}'
-    dest: '~'
-    force: 'no'
-  with_items:
-    - '.bash_projects'
-    - '.bash_tools'
-
-- name: 'Ensure ~/bin folder is present'
-  file:
-    path: '~/bin'
-    state: 'directory'
-
-- name: 'Copy custom utility scripts into the ~/bin folder'
-  copy:
-    src: '{{ item }}'
-    dest: '~/bin'
-    mode: '0744'
-  with_fileglob:
-    - 'utils/*'
 
 - name: 'Install common utility software'
   homebrew:
@@ -70,8 +33,80 @@
     - 'pstree'
     - 'jq'
     - 'glances'
-    - 'tree'
     - 'coreutils'
+
+- name: 'Ensure .bash_profile file is present'
+  copy:
+    src: 'bash/.bash_profile'
+    dest: '~/.bash_profile'
+    force: 'no'
+
+- name: 'Ensure my shell setup'
+  blockinfile:
+    path: '~/.bash_profile'
+    marker: '# {mark} ANSIBLE MANAGED BASH CONFIG'
+    block: |
+      # Add brew folders to the path
+      export PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin"
+
+      # Add InteliJ IDEA launcher script to path
+      export PATH="$PATH:/Applications/IntelliJ IDEA.app/Contents/MacOS"
+
+      # Bash completion
+      if [[ -n "$(command -v brew)" ]]
+      then
+          if [[ -f $(brew --prefix)/etc/bash_completion ]]; then
+              . $(brew --prefix)/etc/bash_completion
+          fi
+      fi
+
+      if [[ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash ]]; then
+      	. /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
+      fi
+
+      # Functions
+      function g {
+          if [[ -f "gradlew" ]]
+          then
+              eval "./gradlew $@"
+          else
+              echo "No gradlew wrapper around..."
+          fi
+      }
+
+      function cls {
+          clear
+          if [ -d '.git' ];
+          then
+              git status
+              echo ""
+          fi
+      }
+
+      function next-uuid {
+        nextVal="$(uuidgen | awk '{ print tolower($0) }' | tr -d '\n')"
+        echo -n "$nextVal" | pbcopy
+        echo "New UUID '$nextVal' copied to clipboard"
+        echo
+      }
+
+      # Aliases
+      alias la='ls -a'
+      alias ll='ls -lha'
+      alias l='ls -lh'
+      alias ch='git rev-parse HEAD'
+
+      # Terminal colors
+      export CLICOLOR=1
+      export LSCOLORS="GxFxCxDxBxegedabagaced"
+      alias grep='grep --color=auto'
+
+      GREEN="\033[32m"
+      YELLOW="\033[33;1m"
+      CLEAR="\033[0m"
+
+      export PS1="${GREEN}\u@\h: ${YELLOW}\w ${CLEAR}\n\$ "
+    state: 'present'
 
 - name: 'Install Vundle'
   git:

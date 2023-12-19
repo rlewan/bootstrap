@@ -1,21 +1,4 @@
 ---
-- name: 'Set user name and email'
-  git_config:
-    scope: 'global'
-    name: "user.{{ item.key }}"
-    value: "{{ item.value }}"
-  with_dict:
-    name: 'Rafał Lewandowski'
-    email: 'rafalowski@protonmail.com'
-
-- name: 'Install git-duet tap'
-  homebrew_tap:
-    name: 'git-duet/tap'
-
-- name: 'Install git-duet'
-  homebrew:
-    name: 'git-duet'
-
 - name: 'Configure the pull strategy'
   git_config:
     scope: 'global'
@@ -28,6 +11,5 @@
     name: "alias.{{ item.key }}"
     value: "{{ item.value }}"
   with_dict:
-    ci: 'duet-commit -v'
     st: 'status'
     lol: "log --pretty=format:'%C(auto)%h %C(cyan)%ch %C(reset)%s'"

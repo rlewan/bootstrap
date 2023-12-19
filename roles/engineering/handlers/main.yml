@@ -1,3 +1,0 @@
----
-- name: 'Link kubectl'
-  command: 'brew link --overwrite kubernetes-cli'
