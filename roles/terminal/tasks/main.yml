@@ -90,6 +90,17 @@
         echo
       }
 
+      function jdk {
+        if [[ -z "$1" ]]
+        then
+          /usr/libexec/java_home -V
+        else
+          local java_home_path="$(/usr/libexec/java_home --version $1)"
+          echo "Setting JAVA_HOME=\"$java_home_path\""
+          export JAVA_HOME="$java_home_path"
+        fi
+      }
+
       # Aliases
       alias la='ls -a'
       alias ll='ls -lha'
