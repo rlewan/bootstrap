@@ -36,3 +36,6 @@ set cursorline
 
 " Set the timeout of switching between modes to 50 ms
 set ttimeoutlen=50
+
+" Set color scheme
+colorscheme slate
