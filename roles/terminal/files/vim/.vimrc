@@ -37,5 +37,7 @@ set cursorline
 " Set the timeout of switching between modes to 50 ms
 set ttimeoutlen=50
 
-" Set color scheme
+" Set color scheme and disable background to keep transparency
 colorscheme slate
+hi! Normal ctermbg=NONE guibg=NONE
+hi! NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
