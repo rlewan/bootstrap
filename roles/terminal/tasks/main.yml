@@ -34,6 +34,7 @@
     - 'jq'
     - 'glances'
     - 'coreutils'
+    - 'k9s'
 
 - name: 'Ensure .bash_profile file is present'
   copy:
