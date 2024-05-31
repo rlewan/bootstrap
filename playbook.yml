@@ -4,6 +4,8 @@
   connection: 'local'
 
   roles:
+    - role: 'azure'
+      tags: ['azure']
     - role: 'git'
       tags: ['git']
     - role: 'terminal'

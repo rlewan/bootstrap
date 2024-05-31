@@ -1,0 +1,9 @@
+---
+- name: 'Install Azure/AKS connection tools'
+  homebrew:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'azure-cli'
+    - 'Azure/kubelogin/kubelogin'
+    - 'kubernetes-cli'
