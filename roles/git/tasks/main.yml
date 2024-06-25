@@ -15,3 +15,4 @@
     lol: "log --pretty=format:'%C(auto)%h %C(cyan)%ch %C(reset)%s'"
     fix: 'commit --amend --no-edit'
     difff: 'diff --cached'
+    co: 'checkout'
