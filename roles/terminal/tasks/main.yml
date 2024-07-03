@@ -53,6 +53,9 @@
       # Add InteliJ IDEA launcher script to path
       export PATH="$PATH:/Applications/IntelliJ IDEA.app/Contents/MacOS"
 
+      # Disable the ZSH recommendation
+      export BASH_SILENCE_DEPRECATION_WARNING=1
+
       # Bash completion
       if [[ -n "$(command -v brew)" ]]
       then
