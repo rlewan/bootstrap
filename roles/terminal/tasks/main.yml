@@ -110,6 +110,7 @@
       alias ll='ls -lha'
       alias l='ls -lh'
       alias ch='git rev-parse HEAD'
+      alias vundle-update='vim +PluginInstall +qall'
 
       # Terminal colors
       export CLICOLOR=1
