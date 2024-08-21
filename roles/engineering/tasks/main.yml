@@ -71,7 +71,6 @@
   homebrew_tap:
     name: '{{ item }}'
   with_items:
-    - 'homebrew/cask-versions'
     - 'shyiko/ktlint'
 
 - name: 'Install the JDK'
@@ -80,7 +79,7 @@
     state: 'present'
   with_items:
     - 'temurin'
-    - 'temurin21'
+    - 'temurin@21'
 
 - name: 'Ensure ~/bin folder is present'
   file:
