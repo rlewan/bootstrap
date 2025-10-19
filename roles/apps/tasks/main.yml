@@ -16,6 +16,7 @@
     - '1password'
     - 'messenger'
     - 'rectangle'
+    - 'claude'
 
 - name: 'Install command line stuff'
   homebrew:
