@@ -5,6 +5,7 @@
     state: 'present'
   with_items:
     - 'intellij-idea'
+    - 'visual-studio-code'
 
 - name: 'Install networking command line software'
   homebrew:
