@@ -23,25 +23,6 @@
     - 'postman'
     - 'wireshark'
 
-- name: 'Install virtualization software'
-  homebrew_cask:
-    name: '{{ item }}'
-    state: 'present'
-  with_items:
-    - 'docker'
-
-# Cloud stuff
-- name: 'Install Kubernetes CLI'
-  homebrew:
-    name: 'kubernetes-cli'
-    state: 'installed'
-  notify: 'Link kubectl'
-
-- name: 'Install tfenv'
-  homebrew:
-    name: 'tfenv'
-    state: 'installed'
-
 # Node.js stuff
 - name: 'Install command line tools for Node.js'
   homebrew:
@@ -67,19 +48,12 @@
     state: 'present'
 
 # JVM stuff
-- name: 'Enable Homebrew taps required to setup the JDKs'
-  homebrew_tap:
-    name: '{{ item }}'
-  with_items:
-    - 'shyiko/ktlint'
-
 - name: 'Install the JDK'
   homebrew_cask:
     name: '{{ item }}'
     state: 'present'
   with_items:
     - 'temurin'
-    - 'temurin@21'
 
 - name: 'Ensure ~/bin folder is present'
   file:
@@ -97,19 +71,5 @@
     path: '~/.bash_tools'
     marker: '# {mark} ANSIBLE MANAGED JVM CONFIG'
     block: |
-      export JAVA_HOME=$(/usr/libexec/java_home --version 21)
+      export JAVA_HOME=$(/usr/libexec/java_home)
     state: 'present'
-
-- name: 'Install ktlint'
-  homebrew:
-    name: 'shyiko/ktlint/ktlint'
-    state: 'present'
-
-# Clojure stuff
-- name: 'Install tools for Clojure'
-  homebrew:
-    name: '{{ item }}'
-    state: 'installed'
-  with_items:
-    - 'leiningen'
-    - 'clojure'
