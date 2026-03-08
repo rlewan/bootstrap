@@ -7,7 +7,7 @@
     - 'intellij-idea'
     - 'visual-studio-code'
 
-- name: 'Install networking command line software'
+- name: 'Install networking command line tools'
   homebrew:
     name: '{{ item }}'
     state: 'present'
@@ -15,6 +15,13 @@
     - 'nmap'
     - 'iftop'
     - 'jmeter'
+
+- name: 'Install LLM/Agent coding tools'
+  homebrew:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'opencode'
 
 - name: 'Install networking apps'
   homebrew_cask:
