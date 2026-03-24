@@ -48,10 +48,10 @@
     marker: '# {mark} ANSIBLE MANAGED BASH CONFIG'
     block: |
       # Add brew folders to the path
-      export PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin"
+      export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
       # Add InteliJ IDEA launcher script to path
-      export PATH="$PATH:/Applications/IntelliJ IDEA.app/Contents/MacOS"
+      export PATH="/Applications/IntelliJ IDEA.app/Contents/MacOS:$PATH"
 
       # Disable the ZSH recommendation
       export BASH_SILENCE_DEPRECATION_WARNING=1
