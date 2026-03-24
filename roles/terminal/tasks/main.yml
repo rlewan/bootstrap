@@ -35,6 +35,7 @@
     - 'glances'
     - 'coreutils'
     - 'k9s'
+    - 'opencode'
 
 - name: 'Ensure .bash_profile file is present'
   copy:
