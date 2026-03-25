@@ -1,0 +1,258 @@
+#!/usr/bin/env bash
+# add_frame.sh — Add a solid #FAFAFA border around an image
+#
+# Usage:
+#   add_frame.sh [options] <image>
+#
+# Options:
+#   -w, --width <percentage>      Border width as % of longer dimension (default: 2.5)
+#   -a, --aspect-ratio <WxH>      Desired output aspect ratio (e.g. 2x3, 5x4, 1x1)
+#
+# Output:
+#   A new image with "_framed" inserted before the file extension.
+#   e.g. dog.png → dog_framed.png
+#
+# Dependencies:
+#   ImageMagick 7 (magick)
+
+set -euo pipefail
+
+BORDER_COLOR="#FAFAFA"
+DEFAULT_PCT="2.5"
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+usage() {
+  echo "Usage: $(basename "$0") [options] <image>" >&2
+  echo "" >&2
+  echo "Options:" >&2
+  echo "  -w, --width <percentage>   Border width as % of longer dimension (default: ${DEFAULT_PCT})" >&2
+  echo "  -a, --aspect-ratio <WxH>   Output aspect ratio, e.g. 2x3, 5x4, 1x1" >&2
+  echo "" >&2
+  echo "Examples:" >&2
+  echo "  $(basename "$0") dog.png" >&2
+  echo "  $(basename "$0") -w 5 dog.png" >&2
+  echo "  $(basename "$0") -w 5% -a 1x1 dog.png" >&2
+  echo "  $(basename "$0") --width 5 --aspect-ratio 4x5 dog.png" >&2
+  exit 1
+}
+
+die() {
+  echo "Error: $*" >&2
+  exit 1
+}
+
+# Round a floating-point number to the nearest integer
+round() {
+  awk "BEGIN { printf \"%.0f\", $1 }"
+}
+
+# ---------------------------------------------------------------------------
+# Argument parsing
+# ---------------------------------------------------------------------------
+
+PCT_RAW="$DEFAULT_PCT"
+RATIO_RAW=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -w|--width)
+      [[ $# -gt 1 ]] || die "Option $1 requires an argument"
+      PCT_RAW="$2"
+      shift 2
+      ;;
+    -w=*|--width=*)
+      PCT_RAW="${1#*=}"
+      shift
+      ;;
+    -a|--aspect-ratio)
+      [[ $# -gt 1 ]] || die "Option $1 requires an argument"
+      RATIO_RAW="$2"
+      shift 2
+      ;;
+    -a=*|--aspect-ratio=*)
+      RATIO_RAW="${1#*=}"
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      die "Unknown option: $1"
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+[[ $# -eq 1 ]] || usage
+
+INPUT="$1"
+
+# ---------------------------------------------------------------------------
+# Validate inputs
+# ---------------------------------------------------------------------------
+
+# Validate input file
+[[ -f "$INPUT" ]] || die "File not found: $INPUT"
+[[ -r "$INPUT" ]] || die "File not readable: $INPUT"
+
+# Strip optional trailing % from percentage
+PCT="${PCT_RAW%\%}"
+
+# Validate percentage is a non-negative number
+if ! [[ "$PCT" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+  die "Invalid percentage '$PCT_RAW'. Must be a non-negative number (e.g. 5 or 5%)"
+fi
+
+# Validate aspect ratio if provided
+RATIO_W=0
+RATIO_H=0
+HAS_RATIO=false
+if [[ -n "$RATIO_RAW" ]]; then
+  if ! [[ "$RATIO_RAW" =~ ^([0-9]+)x([0-9]+)$ ]]; then
+    die "Invalid aspect ratio '$RATIO_RAW'. Expected format WxH (e.g. 2x3, 5x4, 1x1)"
+  fi
+  RATIO_W="${BASH_REMATCH[1]}"
+  RATIO_H="${BASH_REMATCH[2]}"
+  [[ "$RATIO_W" -gt 0 && "$RATIO_H" -gt 0 ]] || die "Aspect ratio dimensions must be positive integers"
+  HAS_RATIO=true
+fi
+
+# ---------------------------------------------------------------------------
+# Check dependency
+# ---------------------------------------------------------------------------
+
+command -v magick >/dev/null 2>&1 || die "ImageMagick (magick) is not installed or not in PATH"
+
+# ---------------------------------------------------------------------------
+# Read source image dimensions
+# ---------------------------------------------------------------------------
+
+DIMENSIONS=$(magick identify -format "%w %h" "$INPUT") || die "Could not read dimensions from '$INPUT'"
+IMG_W="${DIMENSIONS%% *}"
+IMG_H="${DIMENSIONS##* }"
+
+[[ -n "$IMG_W" && -n "$IMG_H" ]] || die "Could not read dimensions from '$INPUT'"
+
+# ---------------------------------------------------------------------------
+# Calculate uniform border width (in pixels)
+# ---------------------------------------------------------------------------
+
+LONGER=$(( IMG_W > IMG_H ? IMG_W : IMG_H ))
+BORDER=$(round "$LONGER * $PCT / 100")
+
+# ---------------------------------------------------------------------------
+# Calculate output canvas dimensions
+# ---------------------------------------------------------------------------
+
+NATURAL_W=$(( IMG_W + 2 * BORDER ))
+NATURAL_H=$(( IMG_H + 2 * BORDER ))
+
+OUT_W=$NATURAL_W
+OUT_H=$NATURAL_H
+
+if $HAS_RATIO; then
+  # Determine the canvas required to satisfy the target ratio, while keeping
+  # the image centered with at least BORDER px on every side.
+  #
+  # Strategy: fit the natural canvas into the target ratio by expanding the
+  # short axis. If natural_w / natural_h > ratio_w / ratio_h  →  expand height.
+  # Otherwise expand width.
+  #
+  # Cross-multiply to avoid floating point: natural_w * ratio_h vs natural_h * ratio_w
+
+  LHS=$(( NATURAL_W * RATIO_H ))
+  RHS=$(( NATURAL_H * RATIO_W ))
+
+  if [[ $LHS -eq $RHS ]]; then
+    # Natural canvas already matches the target ratio exactly — nothing to do
+    OUT_W=$NATURAL_W
+    OUT_H=$NATURAL_H
+
+  elif [[ $LHS -gt $RHS ]]; then
+    # Natural canvas is wider than target ratio → expand height
+    # out_h = natural_w * ratio_h / ratio_w  (rounded up to keep ≥ natural_h)
+    NEEDED_H=$(awk "BEGIN { printf \"%.0f\", $NATURAL_W * $RATIO_H / $RATIO_W }")
+    if [[ "$NEEDED_H" -lt "$NATURAL_H" ]]; then
+      # Rounding pushed us below natural_h; step up by 1
+      NEEDED_H=$NATURAL_H
+    fi
+    OUT_W=$NATURAL_W
+    OUT_H=$NEEDED_H
+
+    # Sanity: verify we haven't gone *below* NATURAL_H (shouldn't happen)
+    if [[ $OUT_H -lt $NATURAL_H ]]; then
+      echo "Warning: aspect ratio '${RATIO_RAW}' is already satisfied by the natural canvas. Using natural canvas." >&2
+      OUT_W=$NATURAL_W
+      OUT_H=$NATURAL_H
+    fi
+
+  else
+    # Natural canvas is taller than target ratio → expand width
+    NEEDED_W=$(awk "BEGIN { printf \"%.0f\", $NATURAL_H * $RATIO_W / $RATIO_H }")
+    if [[ "$NEEDED_W" -lt "$NATURAL_W" ]]; then
+      NEEDED_W=$NATURAL_W
+    fi
+    OUT_W=$NEEDED_W
+    OUT_H=$NATURAL_H
+
+    if [[ $OUT_W -lt $NATURAL_W ]]; then
+      echo "Warning: aspect ratio '${RATIO_RAW}' is already satisfied by the natural canvas. Using natural canvas." >&2
+      OUT_W=$NATURAL_W
+      OUT_H=$NATURAL_H
+    fi
+  fi
+
+  # Final check: confirm the chosen canvas doesn't shrink below natural canvas
+  # (guards against edge cases from integer rounding)
+  if [[ $OUT_W -lt $NATURAL_W || $OUT_H -lt $NATURAL_H ]]; then
+    echo "Warning: aspect ratio '${RATIO_RAW}' cannot be applied without reducing border below ${BORDER}px. Using natural canvas." >&2
+    OUT_W=$NATURAL_W
+    OUT_H=$NATURAL_H
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Build output filename  (e.g. dog.png → dog_framed.png)
+# ---------------------------------------------------------------------------
+
+BASENAME=$(basename "$INPUT")
+DIRNAME=$(dirname "$INPUT")
+EXT="${BASENAME##*.}"
+
+if [[ "$BASENAME" == "$EXT" ]]; then
+  # No extension
+  STEM="$BASENAME"
+  OUTPUT="${DIRNAME}/${STEM}_framed"
+else
+  STEM="${BASENAME%.*}"
+  OUTPUT="${DIRNAME}/${STEM}_framed.${EXT}"
+fi
+
+# ---------------------------------------------------------------------------
+# Compose the output image
+# ---------------------------------------------------------------------------
+
+magick "$INPUT" \
+  -background "$BORDER_COLOR" \
+  -gravity Center \
+  -extent "${OUT_W}x${OUT_H}" \
+  "$OUTPUT"
+
+# ---------------------------------------------------------------------------
+# Summary
+# ---------------------------------------------------------------------------
+
+echo "Input:   ${INPUT}  (${IMG_W}x${IMG_H})"
+echo "Border:  ${BORDER}px  (${PCT}% of ${LONGER}px longer dimension)"
+if $HAS_RATIO; then
+  echo "Ratio:   ${RATIO_RAW}  →  canvas adjusted to ${OUT_W}x${OUT_H}"
+else
+  echo "Output:  ${OUT_W}x${OUT_H}"
+fi
+echo "Saved:   ${OUTPUT}"
