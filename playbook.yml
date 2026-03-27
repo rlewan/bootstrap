@@ -10,3 +10,5 @@
       tags: ['git']
     - role: 'terminal'
       tags: ['terminal']
+    - role: 'automations'
+      tags: ['automations']
