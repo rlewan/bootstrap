@@ -48,6 +48,9 @@
     path: '~/.bash_profile'
     marker: '# {mark} ANSIBLE MANAGED BASH CONFIG'
     block: |
+      # Set the CLI language
+      export LANG="en_US.UTF-8"
+
       # Add brew folders to the path
       export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
