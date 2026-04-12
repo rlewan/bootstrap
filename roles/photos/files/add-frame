@@ -2,7 +2,7 @@
 # add_frame.sh — Add a solid #FAFAFA border around an image
 #
 # Usage:
-#   add_frame.sh [options] <image>
+#   add_frame.sh [options] <image> [image ...]
 #
 # Options:
 #   -w, --width <percentage>      Border width as % of longer dimension (default: 2.5)
@@ -25,7 +25,7 @@ DEFAULT_PCT="2.5"
 # ---------------------------------------------------------------------------
 
 usage() {
-  echo "Usage: $(basename "$0") [options] <image>" >&2
+  echo "Usage: $(basename "$0") [options] <image> [image ...]" >&2
   echo "" >&2
   echo "Options:" >&2
   echo "  -w, --width <percentage>   Border width as % of longer dimension (default: ${DEFAULT_PCT})" >&2
@@ -36,6 +36,7 @@ usage() {
   echo "  $(basename "$0") -w 5 dog.png" >&2
   echo "  $(basename "$0") -w 5% -a 1x1 dog.png" >&2
   echo "  $(basename "$0") --width 5 --aspect-ratio 4x5 dog.png" >&2
+  echo "  $(basename "$0") DSCF*.jpg" >&2
   exit 1
 }
 
@@ -89,17 +90,11 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-[[ $# -eq 1 ]] || usage
-
-INPUT="$1"
+[[ $# -ge 1 ]] || usage
 
 # ---------------------------------------------------------------------------
-# Validate inputs
+# Validate options
 # ---------------------------------------------------------------------------
-
-# Validate input file
-[[ -f "$INPUT" ]] || die "File not found: $INPUT"
-[[ -r "$INPUT" ]] || die "File not readable: $INPUT"
 
 # Strip optional trailing % from percentage
 PCT="${PCT_RAW%\%}"
@@ -128,6 +123,16 @@ fi
 # ---------------------------------------------------------------------------
 
 command -v magick >/dev/null 2>&1 || die "ImageMagick (magick) is not installed or not in PATH"
+
+# ---------------------------------------------------------------------------
+# Process each file
+# ---------------------------------------------------------------------------
+
+for INPUT in "$@"; do
+
+# Validate input file
+[[ -f "$INPUT" ]] || die "File not found: $INPUT"
+[[ -r "$INPUT" ]] || die "File not readable: $INPUT"
 
 # ---------------------------------------------------------------------------
 # Read source image dimensions
@@ -256,3 +261,5 @@ else
   echo "Output:  ${OUT_W}x${OUT_H}"
 fi
 echo "Saved:   ${OUTPUT}"
+
+done
