@@ -12,3 +12,5 @@
       tags: ['automations']
     - role: 'software'
       tags: ['software']
+    - role: 'ssh'
+      tags: ['ssh']
