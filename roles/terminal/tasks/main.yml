@@ -54,7 +54,7 @@
       export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
       # Add InteliJ IDEA launcher script to path
-      export PATH="/Applications/IntelliJ IDEA.app/Contents/MacOS:$PATH"
+      export PATH="~/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
 
       # Disable the ZSH recommendation
       export BASH_SILENCE_DEPRECATION_WARNING=1
