@@ -1,4 +1,16 @@
 ---
+- name: 'Configure the username'
+  git_config:
+    scope: 'global'
+    name: 'user.name'
+    value: 'Rafał Lewandowski'
+
+- name: 'Configure the email'
+  git_config:
+    scope: 'global'
+    name: 'user.email'
+    value: 'rafal.lewandowski@allegro.com'
+
 - name: 'Configure the pull strategy'
   git_config:
     scope: 'global'
