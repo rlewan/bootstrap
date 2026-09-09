@@ -36,6 +36,11 @@
     - 'coreutils'
     - 'opencode'
 
+- name: 'Set default shell to Bash on macOS'
+  user:
+    name: "{{ ansible_facts['user_id'] }}"
+    shell: '/bin/bash'
+
 - name: 'Ensure .bash_profile file is present'
   copy:
     src: 'bash/.bash_profile'
