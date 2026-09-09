@@ -1,0 +1,20 @@
+---
+- name: 'Install apps'
+  homebrew_cask:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'rectangle'
+
+- name: 'Tap SDKMAN!'
+  homebrew_tap:
+    name: 'sdkman/tap'
+    trust: true
+
+- name: 'Install software'
+  homebrew:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'nvm'
+    - 'sdkman-cli'

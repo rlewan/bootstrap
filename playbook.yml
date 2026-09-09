@@ -10,3 +10,5 @@
       tags: ['terminal']
     - role: 'automations'
       tags: ['automations']
+    - role: 'software'
+      tags: ['software']
