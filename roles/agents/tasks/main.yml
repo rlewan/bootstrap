@@ -5,6 +5,7 @@
     state: 'present'
   with_items:
     - 'pi-coding-agent'
+    - 'opencode'
 
 - name: 'Configure Allegro scope registry'
   command:
@@ -33,5 +34,6 @@
     marker: '# {mark} ANSIBLE MANAGED SAFE-RUN ALIASES'
     block: |
       alias safe-pi='safe-run --no-background --config ~/.safe-run/config.json -- pi'
+      alias safe-opencode='safe-run --no-background --config ~/.safe-run/config.json -- opencode'
 
     state: 'present'

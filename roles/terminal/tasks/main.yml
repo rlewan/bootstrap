@@ -34,7 +34,6 @@
     - 'jq'
     - 'glances'
     - 'coreutils'
-    - 'opencode'
 
 - name: 'Ensure .bash_profile file is present'
   copy:
