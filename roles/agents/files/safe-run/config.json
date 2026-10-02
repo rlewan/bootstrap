@@ -1,0 +1,12 @@
+{
+  "network": {
+    "allowedDomains": ["registry.npmjs.org", "api.github.com"]
+  },
+  "filesystem": {
+    "allowRead": ["~/.pi"],
+    "allowWrite": ["~/.pi"]
+  },
+  "browserHandoff": {
+    "allowedDomains": ["github.com", "*.github.com"]
+  }
+}

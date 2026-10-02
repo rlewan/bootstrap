@@ -14,3 +14,5 @@
       tags: ['software']
     - role: 'ssh'
       tags: ['ssh']
+    - role: 'agents'
+      tags: ['agents']

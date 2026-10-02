@@ -1,0 +1,37 @@
+---
+- name: 'Install agent harnesses'
+  homebrew:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'pi-coding-agent'
+
+- name: 'Configure Allegro scope registry'
+  command:
+    cmd: 'npm config set @allegro:registry https://artifactory.allegrogroup.com/artifactory/api/npm/group-npm/'
+  changed_when: 'false'
+
+- name: 'Install @allegro/safe-run globally'
+  community.general.npm:
+    name: "@allegro/safe-run"
+    global: 'true'
+    state: 'present'
+
+- name: 'Ensure safe-run config folder'
+  file:
+    path: '~/.safe-run'
+    state: 'directory'
+
+- name: 'Copy safe-run config'
+  copy:
+    src: 'safe-run/config.json'
+    dest: '~/.safe-run/config.json'
+
+- name: 'Ensure safe-run aliases in the shell'
+  blockinfile:
+    path: '~/.bash_profile'
+    marker: '# {mark} ANSIBLE MANAGED SAFE-RUN ALIASES'
+    block: |
+      alias safe-pi='safe-run --no-background --config ~/.safe-run/config.json -- pi'
+
+    state: 'present'
