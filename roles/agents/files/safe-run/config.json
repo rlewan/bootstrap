@@ -3,8 +3,8 @@
     "allowedDomains": ["registry.npmjs.org", "api.github.com"]
   },
   "filesystem": {
-    "allowRead": ["~/.pi"],
-    "allowWrite": ["~/.pi"]
+    "allowRead": ["~/.pi", "~/.omp"],
+    "allowWrite": ["~/.pi", "~/.omp"]
   },
   "browserHandoff": {
     "allowedDomains": ["github.com", "*.github.com"]

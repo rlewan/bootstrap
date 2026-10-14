@@ -35,5 +35,15 @@
     block: |
       alias safe-pi='safe-run --no-background --config ~/.safe-run/config.json -- pi'
       alias safe-opencode='safe-run --no-background --config ~/.safe-run/config.json -- opencode'
+      alias safe-omp='safe-run --no-background --config ~/.safe-run/config.json -- omp'
+    state: 'present'
 
+- name: 'Tap can1357/tap and trust it'
+  community.general.homebrew_tap:
+    name: 'can1357/tap'
+    trust: 'true'
+
+- name: 'Install oh-my-pi'
+  homebrew:
+    name: 'can1357/tap/omp'
     state: 'present'
