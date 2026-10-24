@@ -7,7 +7,8 @@
 # Options:
 #   -w, --width <percentage>      Border width as % of longer dimension (default: 2.5)
 #   -a, --aspect-ratio <WxH>      Desired output aspect ratio (e.g. 2x3, 5x4, 1x1)
-#   -F, --footer                  Add a footer with aperture, shutter speed and ISO
+#   -F, --footer                  Add a footer with exposure settings, camera and lens
+#   -s, --shutter <time>          Override the footer's shutter speed (e.g. 1/125, 2)
 #
 # Output:
 #   A new image with "_framed" inserted before the file extension.
@@ -26,6 +27,11 @@ FOOTER_PCT="5"
 FOOTER_SUPERSAMPLE=4   # render the footer this many times larger, then downscale
 FOOTER_TEXT_COLOR="#555555"
 
+# Second footer line with the camera and lens
+FOOTER_DETAILS_PCT="2.5"       # extra footer height as % of longer dimension
+FOOTER_DETAILS_SCALE="0.6"     # text size relative to the exposure line
+FOOTER_DETAILS_COLOR="#888888"
+
 # Material Icons glyphs (UTF-8 bytes): camera (aperture), shutter_speed, iso
 ICON_APERTURE=$'\xee\x8e\xaf'
 ICON_SHUTTER=$'\xee\x90\xbd'
@@ -41,7 +47,8 @@ usage() {
   echo "Options:" >&2
   echo "  -w, --width <percentage>   Border width as % of longer dimension (default: ${DEFAULT_PCT})" >&2
   echo "  -a, --aspect-ratio <WxH>   Output aspect ratio, e.g. 2x3, 5x4, 1x1" >&2
-  echo "  -F, --footer               Add a footer with aperture, shutter speed and ISO" >&2
+  echo "  -F, --footer               Add a footer with exposure settings, camera and lens" >&2
+  echo "  -s, --shutter <time>       Override the footer's shutter speed, e.g. 1/125 or 2 (needs -F)" >&2
   echo "" >&2
   echo "Examples:" >&2
   echo "  $(basename "$0") dog.png" >&2
@@ -50,6 +57,7 @@ usage() {
   echo "  $(basename "$0") --width 5 --aspect-ratio 4x5 dog.png" >&2
   echo "  $(basename "$0") DSCF*.jpg" >&2
   echo "  $(basename "$0") -F -a 4x5 DSCF*.jpg" >&2
+  echo "  $(basename "$0") -F -s 1/125 DSCF6547.jpg" >&2
   exit 1
 }
 
@@ -61,6 +69,24 @@ die() {
 # Round a floating-point number to the nearest integer
 round() {
   awk "BEGIN { printf \"%.0f\", $1 }"
+}
+
+# Camera name from EXIF Make and Model, e.g. "FUJIFILM X-T3"
+camera_name() {
+  local make="$1" model="$2"
+  # Drop company suffixes such as "NIKON CORPORATION" or "OLYMPUS IMAGING CORP."
+  make=$(sed -E 's/ (IMAGING )?(CORPORATION|CORP\.|CO\., ?LTD\.?)$//I' <<< "$make")
+  # Many models already start with the make (e.g. "Canon EOS R5")
+  if [[ "$(tr '[:upper:]' '[:lower:]' <<< "$model")" == "$(tr '[:upper:]' '[:lower:]' <<< "$make")"* ]]; then
+    echo "$model"
+  else
+    echo "$make $model"
+  fi
+}
+
+# Tidy a lens model, e.g. "XF16mmF1.4 R WR" → "XF 16mm f/1.4 R WR"
+tidy_lens() {
+  sed -E 's/^([A-Za-z]+)([0-9])/\1 \2/; s/mm ?F([0-9])/mm f\/\1/' <<< "$1"
 }
 
 # Print the path of an installed font file, or fail
@@ -82,6 +108,7 @@ find_font() {
 PCT_RAW="$DEFAULT_PCT"
 RATIO_RAW=""
 HAS_FOOTER=false
+SHUTTER_RAW=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -105,6 +132,15 @@ while [[ $# -gt 0 ]]; do
       ;;
     -F|--footer)
       HAS_FOOTER=true
+      shift
+      ;;
+    -s|--shutter)
+      [[ $# -gt 1 ]] || die "Option $1 requires an argument"
+      SHUTTER_RAW="$2"
+      shift 2
+      ;;
+    -s=*|--shutter=*)
+      SHUTTER_RAW="${1#*=}"
       shift
       ;;
     --)
@@ -148,6 +184,16 @@ if [[ -n "$RATIO_RAW" ]]; then
   HAS_RATIO=true
 fi
 
+# Validate shutter speed override if provided: a fraction or seconds,
+# with an optional trailing "s" (e.g. 1/125, 1/125s, 2, 0.5s)
+SHUTTER="${SHUTTER_RAW%s}"
+if [[ -n "$SHUTTER_RAW" ]]; then
+  $HAS_FOOTER || die "Option --shutter only applies together with --footer (-F)"
+  if ! [[ "$SHUTTER" =~ ^([0-9]+/[0-9]+|[0-9]+([.][0-9]+)?)$ ]]; then
+    die "Invalid shutter speed '$SHUTTER_RAW'. Expected e.g. 1/125, 2 or 0.5"
+  fi
+fi
+
 # ---------------------------------------------------------------------------
 # Check dependency
 # ---------------------------------------------------------------------------
@@ -188,28 +234,50 @@ LONGER=$(( IMG_W > IMG_H ? IMG_W : IMG_H ))
 BORDER=$(round "$LONGER * $PCT / 100")
 
 # ---------------------------------------------------------------------------
-# Read exposure metadata and size the footer
+# Read exposure, camera and lens metadata and size the footer
 # ---------------------------------------------------------------------------
 
 FOOTER_ITEMS=()   # alternating icon / value pairs
+FOOTER_DETAILS="" # camera and lens line
 FOOTER_SUMMARY=""
 if $HAS_FOOTER; then
-  # -f prints "-" for missing tags, keeping the field positions stable
-  IFS='|' read -r F_NUMBER EXPOSURE ISO < <(
-    exiftool -m -f -p '$FNumber|$ExposureTime|$ISO' "$INPUT" 2>/dev/null
+  # -f prints "-" for missing tags, keeping the field positions stable;
+  # "#" gives numeric values (LensInfo# is "min_focal max_focal ...")
+  IFS='|' read -r F_NUMBER EXPOSURE ISO MAKE MODEL LENS LENS_INFO FOCAL < <(
+    exiftool -m -f -p '$FNumber|$ExposureTime|$ISO|$Make|$Model|$LensModel|$LensInfo#|$FocalLength#' "$INPUT" 2>/dev/null
   ) || true
+  [[ -n "$SHUTTER" ]] && EXPOSURE="$SHUTTER"
+  F_NUMBER="${F_NUMBER%.0}"   # exiftool prints whole apertures as e.g. "16.0"
   [[ "${F_NUMBER:--}" != "-" ]] && FOOTER_ITEMS+=("$ICON_APERTURE" "f/${F_NUMBER}")
   [[ "${EXPOSURE:--}" != "-" ]] && FOOTER_ITEMS+=("$ICON_SHUTTER" "${EXPOSURE}s")
   [[ "${ISO:--}" != "-" ]] && FOOTER_ITEMS+=("$ICON_ISO" "$ISO")
 
-  if [[ ${#FOOTER_ITEMS[@]} -eq 0 ]]; then
-    echo "Warning: no exposure metadata in '$INPUT'. Skipping footer." >&2
+  if [[ "${MODEL:--}" != "-" ]]; then
+    [[ "${MAKE:--}" == "-" ]] && MAKE=""
+    FOOTER_DETAILS=$(camera_name "$MAKE" "$MODEL")
+  fi
+  if [[ "${LENS:--}" != "-" ]]; then
+    LENS=$(tidy_lens "$LENS")
+    # Zoom lens: add the focal length the photo was taken at
+    read -r MIN_FOCAL MAX_FOCAL _ <<< "${LENS_INFO:--}"
+    if [[ "${MAX_FOCAL:-}" != "" && "$MIN_FOCAL" != "$MAX_FOCAL" && "${FOCAL:--}" != "-" ]]; then
+      LENS+=" @ $(round "$FOCAL")mm"
+    fi
+    FOOTER_DETAILS+="${FOOTER_DETAILS:+  ·  }${LENS}"
+  fi
+
+  if [[ ${#FOOTER_ITEMS[@]} -eq 0 && -z "$FOOTER_DETAILS" ]]; then
+    echo "Warning: no exposure, camera or lens metadata in '$INPUT'. Skipping footer." >&2
   fi
 fi
 
 FOOTER_H=0
-if [[ ${#FOOTER_ITEMS[@]} -gt 0 ]]; then
-  FOOTER_H=$(round "$LONGER * $FOOTER_PCT / 100")
+FOOTER_UNIT=$(round "$LONGER * $FOOTER_PCT / 100")
+if [[ ${#FOOTER_ITEMS[@]} -gt 0 || -n "$FOOTER_DETAILS" ]]; then
+  FOOTER_H=$FOOTER_UNIT
+  if [[ -n "$FOOTER_DETAILS" ]]; then
+    FOOTER_H=$(( FOOTER_H + $(round "$LONGER * $FOOTER_DETAILS_PCT / 100") ))
+  fi
 fi
 
 # The footer takes the place of the bottom border
@@ -316,11 +384,19 @@ FOOTER_ARGS=()
 if [[ $FOOTER_H -gt 0 ]]; then
   # Draw the footer at FOOTER_SUPERSAMPLE x size and scale it down: this gives
   # much smoother edges than FreeType's anti-aliasing at small sizes
-  POINTSIZE=$(round "$FOOTER_H * 0.4 * $FOOTER_SUPERSAMPLE")
+  POINTSIZE=$(round "$FOOTER_UNIT * 0.4 * $FOOTER_SUPERSAMPLE")
   GAP=$(( POINTSIZE * 2 ))
   KERNING=$(awk "BEGIN { print $POINTSIZE * 0.05 }")
+  DETAILS_POINTSIZE=$(round "$POINTSIZE * $FOOTER_DETAILS_SCALE")
+  DETAILS_KERNING=$(awk "BEGIN { print $DETAILS_POINTSIZE * 0.05 }")
+  LINE_GAP=$(round "$POINTSIZE * 0.3")
 
   FOOTER_ARGS+=( \( -background "$BORDER_COLOR" -fill "$FOOTER_TEXT_COLOR" -pointsize "$POINTSIZE" -kerning "$KERNING" -gravity Center )
+
+  # Line 1: exposure settings with icons
+  if [[ ${#FOOTER_ITEMS[@]} -gt 0 ]]; then
+    FOOTER_ARGS+=( \( )
+  fi
   for (( i = 0; i < ${#FOOTER_ITEMS[@]}; i += 2 )); do
     if [[ $i -gt 0 ]]; then
       FOOTER_ARGS+=( -size "${GAP}x1" xc:"$BORDER_COLOR" +size )
@@ -330,7 +406,22 @@ if [[ $FOOTER_H -gt 0 ]]; then
     FOOTER_ARGS+=( -font "$TEXT_FONT" label:" ${FOOTER_ITEMS[i+1]}" )
     FOOTER_SUMMARY+="${FOOTER_ITEMS[i+1]}"
   done
-  FOOTER_ARGS+=( +append -filter Box -resize "$(awk "BEGIN { print 100 / $FOOTER_SUPERSAMPLE }")%" \) -gravity Center -geometry "+0+$(( (OUT_H - BOTTOM / 2) - OUT_H / 2 ))" -composite )
+  if [[ ${#FOOTER_ITEMS[@]} -gt 0 ]]; then
+    FOOTER_ARGS+=( +append \) )
+  fi
+
+  # Line 2: camera and lens, smaller and lighter
+  if [[ -n "$FOOTER_DETAILS" ]]; then
+    if [[ ${#FOOTER_ITEMS[@]} -gt 0 ]]; then
+      FOOTER_ARGS+=( -size "1x${LINE_GAP}" xc:"$BORDER_COLOR" +size )
+      FOOTER_SUMMARY+="  |  "
+    fi
+    # label: expands % escapes, so double any literal %
+    FOOTER_ARGS+=( -pointsize "$DETAILS_POINTSIZE" -kerning "$DETAILS_KERNING" -fill "$FOOTER_DETAILS_COLOR" -font "$TEXT_FONT" label:"${FOOTER_DETAILS//%/%%}" )
+    FOOTER_SUMMARY+="$FOOTER_DETAILS"
+  fi
+
+  FOOTER_ARGS+=( -append -filter Box -resize "$(awk "BEGIN { print 100 / $FOOTER_SUPERSAMPLE }")%" \) -gravity Center -geometry "+0+$(( (OUT_H - BOTTOM / 2) - OUT_H / 2 ))" -composite )
 fi
 
 magick "$INPUT" \
