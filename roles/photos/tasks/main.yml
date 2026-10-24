@@ -6,6 +6,20 @@
   with_items:
     - 'imagemagick'
 
+- name: 'Install fonts used by add-frame'
+  homebrew_cask:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - 'font-material-icons'
+
+# The font-montserrat cask only ships the variable font, which ImageMagick
+# renders at its thinnest weight, so fetch the static Light cut instead
+- name: 'Install Montserrat Light font used by add-frame'
+  get_url:
+    url: 'https://github.com/JulietaUla/Montserrat/raw/v7.222/fonts/ttf/Montserrat-Light.ttf'
+    dest: '~/Library/Fonts/Montserrat-Light.ttf'
+
 - name: 'Ensure ~/bin folder is present'
   file:
     path: '~/bin'

@@ -7,6 +7,7 @@
 # Options:
 #   -w, --width <percentage>      Border width as % of longer dimension (default: 2.5)
 #   -a, --aspect-ratio <WxH>      Desired output aspect ratio (e.g. 2x3, 5x4, 1x1)
+#   -F, --footer                  Add a footer with aperture, shutter speed and ISO
 #
 # Output:
 #   A new image with "_framed" inserted before the file extension.
@@ -14,11 +15,21 @@
 #
 # Dependencies:
 #   ImageMagick 7 (magick)
+#   exiftool, Montserrat Light and Material Icons fonts (only with --footer)
 
 set -euo pipefail
 
 BORDER_COLOR="#FAFAFA"
 DEFAULT_PCT="2.5"
+
+FOOTER_PCT="5"
+FOOTER_SUPERSAMPLE=4   # render the footer this many times larger, then downscale
+FOOTER_TEXT_COLOR="#555555"
+
+# Material Icons glyphs (UTF-8 bytes): camera (aperture), shutter_speed, iso
+ICON_APERTURE=$'\xee\x8e\xaf'
+ICON_SHUTTER=$'\xee\x90\xbd'
+ICON_ISO=$'\xee\x8f\xb6'
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -30,6 +41,7 @@ usage() {
   echo "Options:" >&2
   echo "  -w, --width <percentage>   Border width as % of longer dimension (default: ${DEFAULT_PCT})" >&2
   echo "  -a, --aspect-ratio <WxH>   Output aspect ratio, e.g. 2x3, 5x4, 1x1" >&2
+  echo "  -F, --footer               Add a footer with aperture, shutter speed and ISO" >&2
   echo "" >&2
   echo "Examples:" >&2
   echo "  $(basename "$0") dog.png" >&2
@@ -37,6 +49,7 @@ usage() {
   echo "  $(basename "$0") -w 5% -a 1x1 dog.png" >&2
   echo "  $(basename "$0") --width 5 --aspect-ratio 4x5 dog.png" >&2
   echo "  $(basename "$0") DSCF*.jpg" >&2
+  echo "  $(basename "$0") -F -a 4x5 DSCF*.jpg" >&2
   exit 1
 }
 
@@ -50,12 +63,25 @@ round() {
   awk "BEGIN { printf \"%.0f\", $1 }"
 }
 
+# Print the path of an installed font file, or fail
+find_font() {
+  local dir
+  for dir in "$HOME/Library/Fonts" "/Library/Fonts"; do
+    if [[ -f "$dir/$1" ]]; then
+      echo "$dir/$1"
+      return
+    fi
+  done
+  die "Font '$1' not found. $2"
+}
+
 # ---------------------------------------------------------------------------
 # Argument parsing
 # ---------------------------------------------------------------------------
 
 PCT_RAW="$DEFAULT_PCT"
 RATIO_RAW=""
+HAS_FOOTER=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -75,6 +101,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -a=*|--aspect-ratio=*)
       RATIO_RAW="${1#*=}"
+      shift
+      ;;
+    -F|--footer)
+      HAS_FOOTER=true
       shift
       ;;
     --)
@@ -124,6 +154,12 @@ fi
 
 command -v magick >/dev/null 2>&1 || die "ImageMagick (magick) is not installed or not in PATH"
 
+if $HAS_FOOTER; then
+  command -v exiftool >/dev/null 2>&1 || die "exiftool is not installed or not in PATH"
+  TEXT_FONT=$(find_font "Montserrat-Light.ttf" "Install it by running the photos Ansible role")
+  ICON_FONT=$(find_font "MaterialIconsOutlined-Regular.otf" "Install it with: brew install --cask font-material-icons")
+fi
+
 # ---------------------------------------------------------------------------
 # Process each file
 # ---------------------------------------------------------------------------
@@ -152,11 +188,39 @@ LONGER=$(( IMG_W > IMG_H ? IMG_W : IMG_H ))
 BORDER=$(round "$LONGER * $PCT / 100")
 
 # ---------------------------------------------------------------------------
+# Read exposure metadata and size the footer
+# ---------------------------------------------------------------------------
+
+FOOTER_ITEMS=()   # alternating icon / value pairs
+FOOTER_SUMMARY=""
+if $HAS_FOOTER; then
+  # -f prints "-" for missing tags, keeping the field positions stable
+  IFS='|' read -r F_NUMBER EXPOSURE ISO < <(
+    exiftool -m -f -p '$FNumber|$ExposureTime|$ISO' "$INPUT" 2>/dev/null
+  ) || true
+  [[ "${F_NUMBER:--}" != "-" ]] && FOOTER_ITEMS+=("$ICON_APERTURE" "f/${F_NUMBER}")
+  [[ "${EXPOSURE:--}" != "-" ]] && FOOTER_ITEMS+=("$ICON_SHUTTER" "${EXPOSURE}s")
+  [[ "${ISO:--}" != "-" ]] && FOOTER_ITEMS+=("$ICON_ISO" "$ISO")
+
+  if [[ ${#FOOTER_ITEMS[@]} -eq 0 ]]; then
+    echo "Warning: no exposure metadata in '$INPUT'. Skipping footer." >&2
+  fi
+fi
+
+FOOTER_H=0
+if [[ ${#FOOTER_ITEMS[@]} -gt 0 ]]; then
+  FOOTER_H=$(round "$LONGER * $FOOTER_PCT / 100")
+fi
+
+# The footer takes the place of the bottom border
+BOTTOM=$(( FOOTER_H > BORDER ? FOOTER_H : BORDER ))
+
+# ---------------------------------------------------------------------------
 # Calculate output canvas dimensions
 # ---------------------------------------------------------------------------
 
 NATURAL_W=$(( IMG_W + 2 * BORDER ))
-NATURAL_H=$(( IMG_H + 2 * BORDER ))
+NATURAL_H=$(( IMG_H + BORDER + BOTTOM ))
 
 OUT_W=$NATURAL_W
 OUT_H=$NATURAL_H
@@ -243,10 +307,37 @@ fi
 # Compose the output image
 # ---------------------------------------------------------------------------
 
+# Center the photo, keeping the bottom border / footer pinned to the bottom:
+# any extra height from the aspect ratio is split above and below the photo
+OFFSET_X=$(( (OUT_W - IMG_W) / 2 ))
+OFFSET_Y=$(( BORDER + (OUT_H - NATURAL_H) / 2 ))
+
+FOOTER_ARGS=()
+if [[ $FOOTER_H -gt 0 ]]; then
+  # Draw the footer at FOOTER_SUPERSAMPLE x size and scale it down: this gives
+  # much smoother edges than FreeType's anti-aliasing at small sizes
+  POINTSIZE=$(round "$FOOTER_H * 0.4 * $FOOTER_SUPERSAMPLE")
+  GAP=$(( POINTSIZE * 2 ))
+  KERNING=$(awk "BEGIN { print $POINTSIZE * 0.05 }")
+
+  FOOTER_ARGS+=( \( -background "$BORDER_COLOR" -fill "$FOOTER_TEXT_COLOR" -pointsize "$POINTSIZE" -kerning "$KERNING" -gravity Center )
+  for (( i = 0; i < ${#FOOTER_ITEMS[@]}; i += 2 )); do
+    if [[ $i -gt 0 ]]; then
+      FOOTER_ARGS+=( -size "${GAP}x1" xc:"$BORDER_COLOR" +size )
+      FOOTER_SUMMARY+="  "
+    fi
+    FOOTER_ARGS+=( -font "$ICON_FONT" label:"${FOOTER_ITEMS[i]}" )
+    FOOTER_ARGS+=( -font "$TEXT_FONT" label:" ${FOOTER_ITEMS[i+1]}" )
+    FOOTER_SUMMARY+="${FOOTER_ITEMS[i+1]}"
+  done
+  FOOTER_ARGS+=( +append -filter Box -resize "$(awk "BEGIN { print 100 / $FOOTER_SUPERSAMPLE }")%" \) -gravity Center -geometry "+0+$(( (OUT_H - BOTTOM / 2) - OUT_H / 2 ))" -composite )
+fi
+
 magick "$INPUT" \
   -background "$BORDER_COLOR" \
-  -gravity Center \
-  -extent "${OUT_W}x${OUT_H}" \
+  -gravity NorthWest \
+  -extent "${OUT_W}x${OUT_H}-${OFFSET_X}-${OFFSET_Y}" \
+  ${FOOTER_ARGS[@]+"${FOOTER_ARGS[@]}"} \
   "$OUTPUT"
 
 # ---------------------------------------------------------------------------
@@ -259,6 +350,9 @@ if $HAS_RATIO; then
   echo "Ratio:   ${RATIO_RAW}  →  canvas adjusted to ${OUT_W}x${OUT_H}"
 else
   echo "Output:  ${OUT_W}x${OUT_H}"
+fi
+if [[ $FOOTER_H -gt 0 ]]; then
+  echo "Footer:  ${FOOTER_SUMMARY}  (${FOOTER_H}px)"
 fi
 echo "Saved:   ${OUTPUT}"
 
