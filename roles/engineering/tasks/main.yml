@@ -21,6 +21,7 @@
     state: 'present'
   with_items:
     - 'opencode'
+    - 'claude-code'
 
 - name: 'Install networking apps'
   homebrew_cask:
