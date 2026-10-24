@@ -14,7 +14,6 @@
   with_items:
     - 'nmap'
     - 'iftop'
-    - 'jmeter'
 
 - name: 'Install LLM/Agent coding tools'
   homebrew:
@@ -28,7 +27,6 @@
     name: '{{ item }}'
     state: 'present'
   with_items:
-    - 'postman'
     - 'wireshark'
 
 # Node.js stuff
@@ -38,7 +36,6 @@
     state: 'present'
   with_items:
     - 'nvm'
-    - 'yarn'
 
 - name: 'Ensure NVM working directory is present'
   file:

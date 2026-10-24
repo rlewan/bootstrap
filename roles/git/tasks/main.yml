@@ -8,14 +8,6 @@
     name: 'Rafał Lewandowski'
     email: 'rafalowski@protonmail.com'
 
-- name: 'Install git-duet tap'
-  homebrew_tap:
-    name: 'git-duet/tap'
-
-- name: 'Install git-duet'
-  homebrew:
-    name: 'git-duet'
-
 - name: 'Configure the pull strategy'
   git_config:
     scope: 'global'
