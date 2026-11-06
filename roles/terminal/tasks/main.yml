@@ -16,6 +16,21 @@
     src: 'iTerm2/profiles.json'
     dest: '~/Library/Application Support/iTerm2/DynamicProfiles'
 
+- name: 'Install Ghostty terminal emulator'
+  homebrew_cask:
+    name: 'ghostty'
+    state: 'present'
+
+- name: 'Ensure "~/.config/ghostty" folder is present'
+  file:
+    path: '~/.config/ghostty'
+    state: 'directory'
+
+- name: 'Copy Ghostty config'
+  copy:
+    src: 'ghostty/config.ghostty'
+    dest: '~/.config/ghostty/config.ghostty'
+
 - name: Switch to latest BASH
   user:
     name: "{{ ansible_env.USER }}"
