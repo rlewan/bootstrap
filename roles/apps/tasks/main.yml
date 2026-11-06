@@ -6,7 +6,6 @@
   with_items:
     - 'spotify'
     - 'whatsapp'
-    - 'flycut'
     - 'vlc'
     - 'google-chrome'
     - 'firefox'
