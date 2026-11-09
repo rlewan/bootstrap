@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Wraps each stdin line in quotes and appends a comma.
+
+usage() {
+  cat <<'EOF'
+Usage: ... | quotify [-s | -d | -b | -q QUOTE]
+
+Wraps each input line in quotes and appends a comma.
+
+  -d, --double      double quotes (default)
+  -s, --single      single quotes
+  -b, --backtick    backticks
+  -q, --quote STR   custom quote string
+  -h, --help        show this help
+EOF
+}
+
+q='"'
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -s|--single)   q="'" ;;
+    -d|--double)   q='"' ;;
+    -b|--backtick) q='`' ;;
+    -q|--quote)
+      if [[ $# -lt 2 ]]; then
+        echo "quotify: $1 requires a value" >&2
+        exit 2
+      fi
+      q="$2"
+      shift
+      ;;
+    -h|--help) usage; exit 0 ;;
+    *) usage >&2; exit 2 ;;
+  esac
+  shift
+done
+
+Q="$q" exec awk '
+  BEGIN { q = ENVIRON["Q"] }
+  { sub(/\r$/, "") }
+  $0 != "" { print q $0 q "," }
+'

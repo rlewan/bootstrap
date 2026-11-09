@@ -35,6 +35,17 @@
     - 'glances'
     - 'coreutils'
 
+- name: 'Ensure "~/bin" folder is present'
+  file:
+    path: '~/bin'
+    state: 'directory'
+
+- name: 'Copy scripts'
+  copy:
+    src: './bin/'
+    mode: '0755'
+    dest: '~/bin'
+
 - name: 'Ensure .bash_profile file is present'
   copy:
     src: 'bash/.bash_profile'
@@ -51,6 +62,9 @@
 
       # Add brew folders to the path
       export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+
+      # Add personal scripts to the path
+      export PATH="$HOME/bin:$PATH"
 
       # Add InteliJ IDEA launcher script to path
       export PATH="~/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
